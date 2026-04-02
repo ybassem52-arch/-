@@ -27,7 +27,7 @@ checkNewMonth();
 </head>
 <body class="bg-gray-100 p-4">
   <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
-    <h1 class="text-2xl font-bold mb-4 text-center">متابعة مصاريف البيت</h1>
+    <h1 class="text-2xl font-bold mb-4 text-center"> تطبيق ست الكل للمصاريف </h1>
     
     <form id="expenseForm" class="mb-4">
       <div>
@@ -36,6 +36,7 @@ checkNewMonth();
           <option value="أكل">أكل</option>
           <option value="مواصلات">مواصلات</option>
           <option value="فواتير">فواتير</option>
+          <option value="آخر">آخر</option>
         </select>
       </div>
       <div>
@@ -78,7 +79,7 @@ checkNewMonth();
     function renderExpenses() {
       expenseTableBody.innerHTML = '';
       let total = 0;
-      let expenseCategories = { 'أكل': 0, 'مواصلات': 0, 'فواتير': 0 }; 
+      let expenseCategories = { .آخر': 0, ,أكل': 0, 'مواصلات': 0, 'فواتير': 0  }; 
 
       expenses.forEach(exp => {
         const tr = document.createElement('tr');
@@ -91,7 +92,7 @@ checkNewMonth();
       totalAmountElement.textContent = total; 
 
       const data = {
-        labels: ['أكل', 'مواصلات', 'فواتير'],
+        labels: [ 'أكل', 'مواصلات', 'فواتير', 'آخر],
         datasets: [{
           data: Object.values(expenseCategories),
           backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
