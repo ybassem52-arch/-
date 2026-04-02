@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>متابعة مصاريف البيت</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.3/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js">// كود تصفير العداد كل أول شهر
+function checkNewMonth() {
+    const currentMonth = new Date().getMonth(); // الشهر الحالي (0-11)
+    const savedMonth = localStorage.getItem('savedMonth'); 
+
+    if (savedMonth !== null && savedMonth != currentMonth) {
+        // لو الشهر اتغير، امسح كل المصاريف
+        localStorage.removeItem('expenses'); // اسم المفتاح اللي فيه المصاريف
+        localStorage.setItem('totalAmount', '0');
+        alert("بداية شهر جديد.. تم تصفير المصاريف يا ست الكل! ❤️");
+    }
+    
+    // حفظ الشهر الحالي عشان المرة الجاية
+    localStorage.setItem('savedMonth', currentMonth);
+} 
+
+// شغل الدالة دي أول ما التطبيق يفتح
+checkNewMonth();
+</script>
+</head>
+<body class="bg-gray-100 p-4">
+  <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
+    <h1 class="text-2xl font-bold mb-4 text-center">متابعة مصاريف البيت</h1>
+    
+    <form id="expenseForm" class="mb-4">
+      <div>
+        <label for="expenseName" class="block text-gray-700">نوع المصروف</label>
+        <select id="expenseName" class="w-full border rounded p-2 mt-1" required>
+          <option value="أكل">أكل</option>
+          <option value="مواصلات">مواصلات</option>
+          <option value="فواتير">فواتير</option>
+        </select>
+      </div>
+      <div>
+        <label for="expenseAmount" class="block text-gray-700 mt-4">المبلغ (EGP)</label>
+        <input type="number" id="expenseAmount" class="w-full border rounded p-2 mt-1" placeholder="أدخل المبلغ" required>
+      </div>
+      <button type="submit" class="w-full mt-4 bg-blue-500 text-white rounded p-2">إضافة مصروف</button>
+    </form>
+    
+    <div class="mt-4 border-t pt-4">
+      <strong>المجموع:</strong> <span id="totalAmount">0</span> EGP
+    </div> 
+
+    <table class="mt-4 w-full border-t">
+      <thead>
+        <tr>
+          <th class="text-left p-2">نوع المصروف</th>
+          <th class="text-left p-2">المبلغ (EGP)</th>
+        </tr>
+      </thead>
+      <tbody id="expenseTableBody">
+        <!-- Rows will be inserted here dynamically -->
+      </tbody>
+    </table> 
+
+    <canvas id="expenseChart" class="mt-4"></canvas>
+  </div> 
+
+  <script>
+    const expenseForm = document.getElementById('expenseForm');
+    const expenseName = document.getElementById('expenseName');
+    const expenseAmount = document.getElementById('expenseAmount');
+    const totalAmountElement = document.getElementById('totalAmount');
+    const expenseTableBody = document.getElementById('expenseTableBody');
+    const expenseChartElement = document.getElementById('expenseChart'); 
+
+    let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+    let expenseChart; 
+
+    function renderExpenses() {
+      expenseTableBody.innerHTML = '';
+      let total = 0;
+      let expenseCategories = { 'أكل': 0, 'مواصلات': 0, 'فواتير': 0 }; 
+
+      expenses.forEach(exp => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td class="p-2 border-b">${exp.name}</td><td class="p-2 border-b">${exp.amount} EGP</td>`;
+        expenseTableBody.appendChild(tr);
+        total += parseFloat(exp.amount);
+        expenseCategories[exp.name] += exp.amount;
+      }); 
+
+      totalAmountElement.textContent = total; 
+
+      const data = {
+        labels: ['أكل', 'مواصلات', 'فواتير'],
+        datasets: [{
+          data: Object.values(expenseCategories),
+          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+        }]
+      }; 
+
+      if (expenseChart) {
+        expenseChart.data = data;
+        expenseChart.update();
+      } else {
+        expenseChart = new Chart(expenseChartElement, {
+          type: 'pie',
+          data: data
+        });
+      }
+    } 
+
+    expenseForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const name = expenseName.value;
+      const amount = parseFloat(expenseAmount.value);
+      
+      if (name && amount) {
+        const newExpense = { name, amount };
+        expenses.push(newExpense);
+        localStorage.setItem('expenses', JSON.stringify(expenses));
+        renderExpenses();
+        expenseName.value = 'أكل'; // Set to default value after adding
+        expenseAmount.value = '';
+      }
+    }); 
+
+    window.addEventListener('load', renderExpenses);
+  </script>
+</body>
+  </html>
