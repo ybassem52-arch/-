@@ -23,9 +23,8 @@
 <body>
 
 <div class="card">
-    <h1>ميزانية ست الكل ❤️ (نسخة الإبرة للصاروخ)</h1>
-    <div class="sub-title">برمجة يوسف - الإسكندرية 🌊</div>
-
+<h1 id="appTitle">Moneto - مونيتو</h1>
+<div class="sub-title" id="subTitle">Smart Budgeting 🚀</div>
     <div class="budget-box">
         <div style="font-size: 12px; color: #1e40af;">الميزانية المتبقية</div>
         <div id="rem" style="font-size: 32px; font-weight: bold; color: #15803d;">0 EGP</div>
@@ -255,6 +254,34 @@
 
     document.getElementById('limit').value = myLimit;
     render();
+  function changeLang() {
+    const lang = document.getElementById('langSwitch').value;
+    const title = document.getElementById('appTitle');
+    const sub = document.getElementById('subTitle');
+    const addBtn = document.querySelector('.add-btn');
+    const waBtn = document.querySelector('.wa-btn');
+
+    if (lang === 'en') {
+        document.body.dir = 'ltr';
+        title.innerText = "Moneto - Smart Budget";
+        sub.innerText = "Developed by Yousef 🚀";
+        addBtn.innerText = "Add Expense ➕";
+        waBtn.innerText = "Send Report to Papa 💌";
+        document.getElementById('searchInput').placeholder = "🔍 Search (Tea, Fish, Sugar...)";
+        document.getElementById('price').placeholder = "Price";
+        document.getElementById('limit').placeholder = "Set Budget";
+    } else {
+        document.body.dir = 'rtl';
+        title.innerText = "مونيتو - الميزانية الذكية";
+        sub.innerText = "برمجة يوسف - مبرمج الإسكندرية 🌊";
+        addBtn.innerText = "إضافة للمصاريف ➕";
+        waBtn.innerText = "التقدير لأبو يوسف 💌";
+        document.getElementById('searchInput').placeholder = "🔍 ابحثي عن (شاي، سمك، سكر...)";
+        document.getElementById('price').placeholder = "المبلغ المطلوب";
+        document.getElementById('limit').placeholder = "حددي الميزانية";
+    }
+}
+  
 </script>
 
 </body>
