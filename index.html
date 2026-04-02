@@ -1,126 +1,140 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تطبيق ميزانية ماما</title>
-  
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="ميزانية ماما">
-  <meta name="theme-color" content="#2563eb">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق ميزانية ست الكل</title>
+    <style>
+        :root { --primary: #2563eb; --success: #22c55e; --danger: #ef4444; --bg: #f8fafc; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); margin: 0; padding: 15px; color: #1e293b; }
+        .card { max-width: 450px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border-top: 8px solid var(--primary); }
+        h1 { text-align: center; color: var(--primary); font-size: 22px; margin-bottom: 20px; }
+        
+        .budget-section { background: #eff6ff; padding: 15px; border-radius: 15px; text-align: center; margin-bottom: 20px; }
+        .rem-amount { font-size: 28px; font-weight: bold; color: var(--success); margin: 5px 0; }
+        
+        input, select { width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--primary); }
+        
+        .add-btn { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; padding: 15px; border-radius: 12px; width: 100%; font-size: 18px; margin-top: 10px; }
+        .add-btn:active { transform: scale(0.98); }
 
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.3/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        .whatsapp-btn { background: var(--success); color: white; border: none; font-weight: bold; cursor: pointer; padding: 15px; border-radius: 12px; width: 100%; font-size: 16px; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3); }
 
-  <style>
-    body { background-color: #f3f4f6; -webkit-tap-highlight-color: transparent; }
-    .card { background: white; border-radius: 15px; shadow: 0 4px 6px rgba(0,0,0,0.1); }
-  </style>
+        .stats { display: flex; justify-content: space-between; margin-top: 20px; padding: 10px; border-bottom: 2px solid #f1f5f9; font-weight: bold; }
+        .list-container { margin-top: 15px; max-height: 180px; overflow-y: auto; }
+        .item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #f1f5f9; font-size: 15px; background: #fff; }
+        .clear-btn { background: none; color: #94a3b8; border: none; text-decoration: underline; font-size: 13px; margin-top: 20px; cursor: pointer; display: block; width: 100%; text-align: center; }
+    </style>
 </head>
 <body>
-  <div class="max-w-md mx-auto p-4">
-    <div class="card p-6 shadow-lg border-t-4 border-blue-500">
-      <h1 class="text-2xl font-bold mb-4 text-center text-blue-600">تطبيق ست الكل ❤️</h1>
-      
-      <div class="mb-4 p-3 bg-blue-50 rounded-lg text-center">
-          <span class="text-xs text-gray-500">الميزانية المتبقية</span>
-          <div class="text-xl font-bold text-green-600" id="remDisplay">0 EGP</div>
-          <input type="number" id="bLimit" class="w-20 text-center text-xs border-b border-blue-200 bg-transparent outline-none" placeholder="حددي المبلغ">
-      </div>
 
-      <form id="expForm" class="space-y-3">
-        <select id="eName" class="w-full border rounded-lg p-2 bg-gray-50 outline-none">
-          <option value="أكل">أكل 🍔</option>
-          <option value="مواصلات">مواصلات 🚗</option>
-          <option value="فواتير">فواتير ⚡</option>
-          <option value="آخر">أخرى 🛍️</option>
-        </select>
-        <input type="number" id="eAmount" class="w-full border rounded-lg p-2 outline-none" placeholder="المبلغ المطلوب" required>
-        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg shadow-md active:bg-blue-800">إضافة ➕</button>
-      </form>
-      
-      <div class="mt-6 flex justify-between items-center border-t pt-4">
-        <div class="text-sm font-bold">المجموع: <span id="totalOut" class="text-red-500">0</span></div>
-        <button onclick="delAll()" class="text-xs text-gray-400 underline">تصفير السجل 🧹</button>
-      </div>
+<div class="card">
+    <h1>ميزانية ست الكل ❤️</h1>
 
-      <canvas id="myChart" class="mt-4" height="200"></canvas>
-
-      <div class="mt-6">
-        <h2 class="text-sm font-bold text-gray-600 mb-2 italic">آخر المصاريف:</h2>
-        <div id="list" class="space-y-2 max-h-40 overflow-y-auto"></div>
-      </div>
+    <div class="budget-section">
+        <div style="font-size: 14px; color: #64748b;">الميزانية المتبقية</div>
+        <div class="rem-amount" id="remDisplay">0 EGP</div>
+        <input type="number" id="totalBudget" placeholder="حددي ميزانية الشهر هنا" style="text-align: center; height: 40px;">
     </div>
-  </div>
 
-  <script>
-    // كود الحفظ الأوفلاين المطور
-    let exps = JSON.parse(localStorage.getItem('exps')) || [];
-    let limit = localStorage.getItem('limit') || 0;
-    let chart;
+    <form id="expForm">
+        <select id="expType">
+            <option value="أكل 🍔">أكل 🍔</option>
+            <option value="مواصلات 🚗">مواصلات 🚗</option>
+            <option value="فواتير ⚡">فواتير ⚡</option>
+            <option value="أخرى 🛍️">أخرى 🛍️</option>
+        </select>
+        <input type="number" id="expAmount" placeholder="المبلغ المطلوب" required>
+        <button type="submit" class="add-btn">إضافة للمصاريف ➕</button>
+    </form>
 
-    function update() {
-      const list = document.getElementById('list');
-      const totalOut = document.getElementById('totalOut');
-      const remDisplay = document.getElementById('remDisplay');
-      
-      list.innerHTML = '';
-      let total = 0;
-      let cats = { 'أكل': 0, 'مواصلات': 0, 'فواتير': 0, 'آخر': 0 };
+    <div class="stats">
+        <span>المصروف: <span id="totalSpent" style="color: var(--danger);">0</span></span>
+        <span style="font-size: 13px; color: #64748b;">يوسف المبرمج 😎</span>
+    </div>
 
-      exps.slice().reverse().forEach(item => {
-        total += item.amount;
-        cats[item.name] += item.amount;
-        list.innerHTML += `<div class="flex justify-between text-sm border-b pb-1"><span>${item.name} (${item.time})</span><span class="font-bold">${item.amount}</span></div>`;
-      });
+    <div class="list-container" id="history"></div>
 
-      totalOut.innerText = total;
-      remDisplay.innerText = (limit - total) + ' EGP';
-      localStorage.setItem('exps', JSON.stringify(exps));
-      
-      draw(Object.values(cats));
-    }
+    <button class="whatsapp-btn" onclick="sendWhatsApp()">
+        تقرير لأبو يوسف 💌
+    </button>
 
-    function draw(dataValues) {
-      const ctx = document.getElementById('myChart').getContext('2d');
-      if (chart) chart.destroy();
-      chart = new Chart(ctx, {
-        type: 'doughnut',
-        data: { labels: ['أكل', 'مواصلات', 'فواتير', 'أخرى'], datasets: [{ data: dataValues, backgroundColor: ['#ef4444', '#3b82f6', '#f59e0b', '#10b981'] }] },
-        options: { plugins: { legend: { display: false } } }
-      });
+    <button class="clear-btn" onclick="resetAll()">تصفير السجل للبداية 🧹</button>
+</div>
+
+<script>
+    let expenses = JSON.parse(localStorage.getItem('mama_app_data')) || [];
+    let budget = localStorage.getItem('mama_app_limit') || 0;
+    const papaPhone = "201013232884"; // رقم بابا
+
+    function updateUI() {
+        const history = document.getElementById('history');
+        const spentDiv = document.getElementById('totalSpent');
+        const remDiv = document.getElementById('remDisplay');
+        
+        history.innerHTML = '';
+        let total = 0;
+
+        expenses.slice().reverse().forEach(item => {
+            total += item.amount;
+            history.innerHTML += `
+                <div class="item">
+                    <span>${item.type} <small style="color:#94a3b8; display:block;">${item.time}</small></span>
+                    <b>${item.amount} EGP</b>
+                </div>`;
+        });
+
+        spentDiv.innerText = total;
+        remDiv.innerText = (budget - total) + ' EGP';
+        
+        // تغيير اللون لو الميزانية خلصت
+        remDiv.style.color = (budget - total) < 0 ? '#ef4444' : '#22c55e';
+
+        localStorage.setItem('mama_app_data', JSON.stringify(expenses));
+        localStorage.setItem('mama_app_limit', budget);
     }
 
     document.getElementById('expForm').onsubmit = (e) => {
-      e.preventDefault();
-      exps.push({
-        name: document.getElementById('eName').value,
-        amount: parseFloat(document.getElementById('eAmount').value),
-        time: new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})
-      });
-      document.getElementById('eAmount').value = '';
-      update();
+        e.preventDefault();
+        const type = document.getElementById('expType').value;
+        const amount = parseFloat(document.getElementById('expAmount').value);
+        const time = new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'});
+
+        expenses.push({ type, amount, time });
+        document.getElementById('expAmount').value = '';
+        updateUI();
     };
 
-    document.getElementById('bLimit').oninput = (e) => {
-      limit = e.target.value;
-      localStorage.setItem('limit', limit);
-      update();
+    document.getElementById('totalBudget').oninput = (e) => {
+        budget = e.target.value;
+        updateUI();
     };
 
-    function delAll() { if(confirm("تمسحي السجل؟")) { exps = []; update(); } }
-    
-    // تحميل البيانات عند البداية
-    document.getElementById('bLimit').value = limit;
-    update();
+    function sendWhatsApp() {
+        if(expenses.length === 0) return alert("السجل فاضي يا ست الكل!");
 
-    // كود الـ Service Worker البسيط جداً للإصدار ده
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('https://cdn.jsdelivr.net/npm/workbox-sw@6.5.4/build/workbox-sw.js').catch(() => {});
-      });
+        let msg = "يا أبو يوسف، ده تقرير بمصاريف البيت النهاردة: %0A";
+        let total = 0;
+        expenses.forEach(ex => {
+            msg += `• ${ex.type}: ${ex.amount} ج.م%0A`;
+            total += ex.amount;
+        });
+        msg += `%0A*إجمالي المصاريف: ${total} ج.م*%0Aمع كل التقدير. ❤️`;
+
+        window.open(`https://wa.me/${papaPhone}?text=${msg}`, '_blank');
     }
-  </script>
+
+    function resetAll() {
+        if(confirm("تمسحي السجل وتصفي الحساب؟")) {
+            expenses = [];
+            updateUI();
+        }
+    }
+
+    document.getElementById('totalBudget').value = budget;
+    updateUI();
+</script>
+
 </body>
 </html>
