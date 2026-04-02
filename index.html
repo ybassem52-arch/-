@@ -3,119 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميزانية ست الكل الماركة المسجلة</title>
+    <title>ميزانية يوسف - النسخة النهائية الشاملة</title>
     <style>
         body { font-family: sans-serif; background-color: #f0f4f8; margin: 0; padding: 15px; }
-        .card { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 8px solid #2563eb; }
-        h1 { text-align: center; color: #2563eb; font-size: 20px; margin-bottom: 15px; }
-        .budget-box { background: #e0e7ff; padding: 15px; border-radius: 15px; text-align: center; margin-bottom: 15px; }
-        input, select, button { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
+        .card { max-width: 480px; margin: auto; background: white; padding: 20px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 10px solid #2563eb; }
+        h1 { text-align: center; color: #1e3a8a; font-size: 20px; margin-bottom: 10px; }
+        .budget-box { background: #eff6ff; padding: 15px; border-radius: 15px; text-align: center; margin-bottom: 15px; border: 1px solid #dbeafe; }
+        .search-area { background: #fffbeb; padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 2px solid #fef08a; }
+        input, select, button { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; }
         .add-btn { background: #2563eb; color: white; border: none; font-weight: bold; cursor: pointer; }
         .wa-btn { background: #22c55e; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 15px; }
-        .history { margin-top: 15px; max-height: 200px; overflow-y: auto; border-top: 2px solid #eee; padding-top: 10px; }
-        .item { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
-        optgroup { font-weight: bold; color: #2563eb; }
+        .history { margin-top: 15px; max-height: 200px; overflow-y: auto; border-top: 2px solid #e2e8f0; }
+        .item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+        optgroup { color: #1e40af; background: #eff6ff; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h1>ميزانية ست الكل ❤️</h1>
+    <h1>ميزانية ست الكل ❤️ (النسخة الكاملة)</h1>
 
     <div class="budget-box">
-        <div style="font-size: 12px; color: #555;">الميزانية المتبقية</div>
-        <div id="rem" style="font-size: 26px; font-weight: bold; color: #16a34a;">0 EGP</div>
-        <input type="number" id="limit" placeholder="حددي ميزانية الشهر" style="height: 35px; font-size: 13px;">
+        <div style="font-size: 12px; color: #1e40af;">الميزانية المتبقية</div>
+        <div id="rem" style="font-size: 28px; font-weight: bold; color: #15803d;">0 EGP</div>
+        <input type="number" id="limit" placeholder="حددي ميزانية الشهر" style="text-align: center;">
     </div>
 
-    <form id="mamaForm">
-        <select id="category">
-            <optgroup label="🍔 الأكل والشرب">
-                <option value="خضار وفاكهة 🍎">خضار وفاكهة</option>
-                <option value="لحوم وفراخ 🍗">لحوم وفراخ</option>
-                <option value="سوبر ماركت 🛒">سوبر ماركت</option>
+    <div class="search-area">
+        <input type="text" id="searchInput" onkeyup="searchMenu()" placeholder="🔍 ابحثي عن (رياضة، مكة، كهرباء، كاري، طماطم...)">
+    </div>
+
+    <form id="expenseForm">
+        <select id="itemSelect" size="10" style="height: 400px;">
+            <optgroup label="📚 دروس يوسف (كل مادة لوحدها)">
+                <option value="درس لغة عربية 📖">درس لغة عربية</option>
+                <option value="درس لغة إنجليزية 🔤">درس لغة إنجليزية</option>
+                <option value="درس رياضيات 🔢">درس رياضيات</option>
+                <option value="درس علوم / ساينس 🧪">درس علوم / ساينس</option>
+                <option value="درس دراسات اجتماعية 🌍">درس دراسات اجتماعية</option>
+                <option value="درس تكنولوجيا ICT 💻">درس ICT</option>
+                <option value="درس لغة فرنسية 🇫🇷">درس لغة فرنسية</option>
+                <option value="درس تربية دينية 🕋">درس تربية دينية</option>
+                <option value="ملازم وكتب خارجية 📝">ملازم وكتب خارجية</option>
             </optgroup>
-            <optgroup label="⚡ الفواتير">
-                <option value="كهرباء ومياه 🚰">كهرباء ومياه</option>
-                <option value="غاز 💨">غاز</option>
-                <option value="نت ورصيد 📱">نت ورصيد</option>
+            <optgroup label="💰 المصروف الشخصي">
+                <option value="مصروف يوسف 👦">مصروف يوسف</option>
+                <option value="مصروف مكة 👧">مصروف مكة</option>
+                <option value="مصروف روضة 👧">مصروف روضة</option>
             </optgroup>
-            <optgroup label="📚 الدروس والتعليم">
-                <option value="مصاريف سنتر 🏫">مصاريف سنتر</option>
-                <option value="كتب ومذكرات 📖">كتب ومذكرات</option>
-                <option value="دروس خصوصية ✏️">دروس خصوصية</option>
+            <optgroup label="⚡ الفواتير والاشتراكات">
+                <option value="فاتورة الكهرباء ⚡">فاتورة الكهرباء</option>
+                <option value="فاتورة المياه 🚰">فاتورة المياه</option>
+                <option value="فاتورة الغاز 🔥">فاتورة الغاز</option>
+                <option value="فاتورة الإنترنت 🌐">فاتورة الإنترنت</option>
+                <option value="شحن رصيد موبايل 📱">شحن رصيد موبايل</option>
+                <option value="فاتورة التليفون الأرضي ☎️">فاتورة التليفون الأرضي</option>
             </optgroup>
-            <option value="أخرى 🛍️">أخرى 🛍️</option>
+            <optgroup label="🧂 العطارة والبهارات (منفصلة)">
+                <option value="ملح 🧂">ملح</option>
+                <option value="فلفل أسود 🖤">فلفل أسود</option>
+                <option value="شطة 🔥">شطة</option>
+                <option value="كاري 🌕">كاري</option>
+                <option value="السبع بهارات ✨">السبع بهارات</option>
+                <option value="مرقة دجاج 🍲">مرقة دجاج</option>
+                <option value="مرقة لحمة 🍖">مرقة لحمة</option>
+                <option value="زيت طعام 🍶">زيت طعام</option>
+                <option value="فيجيتار 🍗">فيجيتار</option>
+                <option value="دقيق 🥡">دقيق</option>
+            </optgroup>
+            <optgroup label="🥦 مملكة الخضروات">
+                <option value="طماطم 🍅">طماطم</option>
+                <option value="خيار 🥒">خيار</option>
+                <option value="بطاطس 🥔">بطاطس</option>
+                <option value="بصل 🧅">بصل</option>
+                <option value="ثوم 🧄">ثوم</option>
+            </optgroup>
+            <optgroup label="🍎 مملكة الفواكه">
+                <option value="بطيخ 🍉">بطيخ</option>
+                <option value="موز 🍌">موز</option>
+                <option value="تفاح 🍎">تفاح</option>
+                <option value="مانجو 🥭">مانجو</option>
+                <option value="فراولة 🍓">فراولة</option>
+            </optgroup>
         </select>
-        <input type="number" id="amount" placeholder="المبلغ" required>
+        
+        <input type="number" id="price" placeholder="المبلغ المطلوب" required>
         <button type="submit" class="add-btn">إضافة للمصاريف ➕</button>
     </form>
 
-    <div style="margin-top: 15px; font-weight: bold; color: #d32f2f; display: flex; justify-content: space-between;">
+    <div style="margin-top: 15px; font-weight: bold; color: #dc2626; display: flex; justify-content: space-between;">
         <span>الإجمالي المصروف:</span>
         <span id="spent">0</span>
     </div>
 
-    <div class="history" id="list"></div>
+    <div class="history" id="historyList"></div>
 
     <button class="wa-btn" onclick="sendToPapa()">التقدير لأبو يوسف 💌</button>
-    
-    <button onclick="if(confirm('تمسحي كله؟')){localStorage.clear(); location.reload();}" style="background:none; border:none; color:#999; font-size:11px; margin-top:15px; width:100%; text-decoration:underline; cursor:pointer;">تصفير البيانات 🧹</button>
 </div>
 
 <script>
-    let expenses = JSON.parse(localStorage.getItem('mama_v3')) || [];
-    let budgetLimit = localStorage.getItem('limit_v3') || 0;
+    let list = JSON.parse(localStorage.getItem('mama_final_all_v4')) || [];
+    let myLimit = localStorage.getItem('limit_final_all_v4') || 0;
 
-    function update() {
-        const list = document.getElementById('list');
-        const spent = document.getElementById('spent');
-        const rem = document.getElementById('rem');
-        
-        list.innerHTML = '';
-        let total = 0;
-
-        expenses.slice().reverse().forEach(ex => {
-            total += ex.a;
-            list.innerHTML += `<div class="item"><span>${ex.c}</span><b>${ex.a} EGP</b></div>`;
-        });
-
-        spent.innerText = total + " EGP";
-        rem.innerText = (budgetLimit - total) + ' EGP';
-        rem.style.color = (budgetLimit - total) < 0 ? "#ef4444" : "#16a34a";
-        
-        localStorage.setItem('mama_v3', JSON.stringify(expenses));
-        localStorage.setItem('limit_v3', budgetLimit);
+    function searchMenu() {
+        let input = document.getElementById("searchInput").value.toUpperCase();
+        let options = document.getElementById("itemSelect").options;
+        for (let i = 0; i < options.length; i++) {
+            let txt = options[i].text || options[i].innerText;
+            options[i].style.display = txt.toUpperCase().indexOf(input) > -1 ? "" : "none";
+        }
     }
 
-    document.getElementById('mamaForm').onsubmit = (e) => {
+    function render() {
+        const hist = document.getElementById('historyList');
+        const spent = document.getElementById('spent');
+        const rem = document.getElementById('rem');
+        hist.innerHTML = '';
+        let total = 0;
+        list.slice().reverse().forEach(x => {
+            total += x.a;
+            hist.innerHTML += `<div class="item"><span>${x.c}</span><b>${x.a} ج.م</b></div>`;
+        });
+        spent.innerText = total + " ج.م";
+        rem.innerText = (myLimit - total) + ' ج.م';
+        rem.style.color = (myLimit - total) < 0 ? "#dc2626" : "#15803d";
+        localStorage.setItem('mama_final_all_v4', JSON.stringify(list));
+        localStorage.setItem('limit_final_all_v4', myLimit);
+    }
+
+    document.getElementById('expenseForm').onsubmit = (e) => {
         e.preventDefault();
-        const c = document.getElementById('category').value;
-        const a = parseFloat(document.getElementById('amount').value);
-        expenses.push({ c, a });
-        document.getElementById('amount').value = '';
-        update();
+        const c = document.getElementById('itemSelect').value;
+        const a = parseFloat(document.getElementById('price').value);
+        if(!c) return alert("اختاري الصنف الأول!");
+        list.push({ c, a });
+        document.getElementById('price').value = '';
+        render();
     };
 
     document.getElementById('limit').oninput = (e) => {
-        budgetLimit = e.target.value;
-        update();
+        myLimit = e.target.value;
+        render();
     };
 
     function sendToPapa() {
-        if(expenses.length === 0) return alert("مفيش مصاريف!");
-        let m = "يا أبو يوسف، ده تقرير بمصاريف البيت والدروس: %0A";
+        if(list.length === 0) return alert("السجل فاضي!");
+        let m = "يا أبو يوسف، ده التقرير النهائي الشامل (كل الدروس، الفواتير، البهارات، مكة وروضة، الخضار، والفاكهة): %0A";
         let s = 0;
-        expenses.forEach(ex => { m += `• ${ex.c}: ${ex.a} ج.م%0A`; s += ex.a; });
-        m += `%0A*الإجمالي: ${s} ج.م*%0Aالميزانية الباقية: ${(budgetLimit - s)} ج.م%0Aمع كل التقدير. ❤️`;
+        list.forEach(x => { m += `• ${x.c}: ${x.a} ج.م%0A`; s += x.a; });
+        m += `%0A*الإجمالي: ${s} ج.م*%0Aالباقي: ${(myLimit - s)} ج.م%0Aكود المبرمج يوسف! 🚀🦾`;
         window.open(`https://wa.me/201013232884?text=${m}`, '_blank');
     }
 
-    document.getElementById('limit').value = budgetLimit;
-    update();
+    document.getElementById('limit').value = myLimit;
+    render();
 </script>
 
 </body>
 </html>
-
-
