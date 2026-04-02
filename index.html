@@ -197,6 +197,7 @@
 
     <button class="wa-btn" onclick="sendToPapa()">التقدير لأبو يوسف 💌</button>
 </div>
+<button onclick="clearAll()" style="background: #ef4444; color: white; border: none; padding: 10px; border-radius: 12px; margin-top: 10px; width: 100%; font-weight: bold; cursor: pointer;">مسح كل المصاريف 🗑️</button>
 
 <script>
     let list = JSON.parse(localStorage.getItem('mama_mall_v6')) || [];
@@ -281,7 +282,15 @@
         document.getElementById('limit').placeholder = "حددي الميزانية";
     }
 }
-  
+function clearAll() {
+    if(confirm("هل أنتي متأكدة من مسح كل المصاريف؟")) {
+        list = [];
+        localStorage.removeItem('mama_final_v13');
+        render();
+    }
+}
+
+
 </script>
 
 </body>
