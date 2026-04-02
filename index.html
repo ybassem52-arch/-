@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميزانية ست الكل</title>
+    <title>ميزانية ست الكل الماركة المسجلة</title>
     <style>
-        /* التنسيق كله هنا عشان يشتغل أوفلاين */
-        body { font-family: sans-serif; background-color: #f4f7f6; margin: 0; padding: 15px; }
-        .card { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-top: 8px solid #2563eb; }
-        h1 { text-align: center; color: #2563eb; margin-bottom: 20px; font-size: 20px; }
-        .budget-box { background: #ebf2ff; padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 20px; }
-        input, select, button { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
+        body { font-family: sans-serif; background-color: #f0f4f8; margin: 0; padding: 15px; }
+        .card { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 8px solid #2563eb; }
+        h1 { text-align: center; color: #2563eb; font-size: 20px; margin-bottom: 15px; }
+        .budget-box { background: #e0e7ff; padding: 15px; border-radius: 15px; text-align: center; margin-bottom: 15px; }
+        input, select, button { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
         .add-btn { background: #2563eb; color: white; border: none; font-weight: bold; cursor: pointer; }
         .wa-btn { background: #22c55e; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 15px; }
-        .history { margin-top: 20px; max-height: 150px; overflow-y: auto; border-top: 1px solid #eee; }
-        .item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dotted #ccc; font-size: 14px; }
-        .total-row { display: flex; justify-content: space-between; margin-top: 15px; font-weight: bold; color: #d32f2f; }
+        .history { margin-top: 15px; max-height: 200px; overflow-y: auto; border-top: 2px solid #eee; padding-top: 10px; }
+        .item { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+        optgroup { font-weight: bold; color: #2563eb; }
     </style>
 </head>
 <body>
@@ -24,40 +23,51 @@
     <h1>ميزانية ست الكل ❤️</h1>
 
     <div class="budget-box">
-        <div style="font-size: 12px;">الميزانية المتبقية</div>
-        <div id="rem" style="font-size: 24px; font-weight: bold; color: #2e7d32;">0 EGP</div>
+        <div style="font-size: 12px; color: #555;">الميزانية المتبقية</div>
+        <div id="rem" style="font-size: 26px; font-weight: bold; color: #16a34a;">0 EGP</div>
         <input type="number" id="limit" placeholder="حددي ميزانية الشهر" style="height: 35px; font-size: 13px;">
     </div>
 
-    <form id="myApp">
-        <select id="type">
-            <option value="أكل 🍔">أكل 🍔</option>
-            <option value="مواصلات 🚗">مواصلات 🚗</option>
-            <option value="فواتير ⚡">فواتير ⚡</option>
+    <form id="mamaForm">
+        <select id="category">
+            <optgroup label="🍔 الأكل والشرب">
+                <option value="خضار وفاكهة 🍎">خضار وفاكهة</option>
+                <option value="لحوم وفراخ 🍗">لحوم وفراخ</option>
+                <option value="سوبر ماركت 🛒">سوبر ماركت</option>
+            </optgroup>
+            <optgroup label="⚡ الفواتير">
+                <option value="كهرباء ومياه 🚰">كهرباء ومياه</option>
+                <option value="غاز 💨">غاز</option>
+                <option value="نت ورصيد 📱">نت ورصيد</option>
+            </optgroup>
+            <optgroup label="📚 الدروس والتعليم">
+                <option value="مصاريف سنتر 🏫">مصاريف سنتر</option>
+                <option value="كتب ومذكرات 📖">كتب ومذكرات</option>
+                <option value="دروس خصوصية ✏️">دروس خصوصية</option>
+            </optgroup>
             <option value="أخرى 🛍️">أخرى 🛍️</option>
         </select>
-        <input type="number" id="amt" placeholder="المبلغ" required>
+        <input type="number" id="amount" placeholder="المبلغ" required>
         <button type="submit" class="add-btn">إضافة للمصاريف ➕</button>
     </form>
 
-    <div class="total-row">
-        <span>إجمالي المصروف:</span>
+    <div style="margin-top: 15px; font-weight: bold; color: #d32f2f; display: flex; justify-content: space-between;">
+        <span>الإجمالي المصروف:</span>
         <span id="spent">0</span>
     </div>
 
     <div class="history" id="list"></div>
 
-    <button class="wa-btn" onclick="sendToPapa()">تقرير لأبو يوسف 💌</button>
+    <button class="wa-btn" onclick="sendToPapa()">التقدير لأبو يوسف 💌</button>
     
-    <button onclick="localStorage.clear(); location.reload();" style="background:none; border:none; color:#999; font-size:11px; margin-top:20px; width:100%; text-decoration:underline;">تصفير كل البيانات 🧹</button>
+    <button onclick="if(confirm('تمسحي كله؟')){localStorage.clear(); location.reload();}" style="background:none; border:none; color:#999; font-size:11px; margin-top:15px; width:100%; text-decoration:underline; cursor:pointer;">تصفير البيانات 🧹</button>
 </div>
 
 <script>
-    // البرمجة كلها هنا - بدون أي ملفات خارجية نهائياً
-    let data = JSON.parse(localStorage.getItem('mama_data')) || [];
-    let myLimit = localStorage.getItem('mama_limit') || 0;
+    let expenses = JSON.parse(localStorage.getItem('mama_v3')) || [];
+    let budgetLimit = localStorage.getItem('limit_v3') || 0;
 
-    function refresh() {
+    function update() {
         const list = document.getElementById('list');
         const spent = document.getElementById('spent');
         const rem = document.getElementById('rem');
@@ -65,46 +75,47 @@
         list.innerHTML = '';
         let total = 0;
 
-        data.slice().reverse().forEach(i => {
-            total += i.a;
-            list.innerHTML += `<div class="item"><span>${i.t}</span><b>${i.a} EGP</b></div>`;
+        expenses.slice().reverse().forEach(ex => {
+            total += ex.a;
+            list.innerHTML += `<div class="item"><span>${ex.c}</span><b>${ex.a} EGP</b></div>`;
         });
 
-        spent.innerText = total;
-        rem.innerText = (myLimit - total) + ' EGP';
+        spent.innerText = total + " EGP";
+        rem.innerText = (budgetLimit - total) + ' EGP';
+        rem.style.color = (budgetLimit - total) < 0 ? "#ef4444" : "#16a34a";
         
-        localStorage.setItem('mama_data', JSON.stringify(data));
-        localStorage.setItem('mama_limit', myLimit);
+        localStorage.setItem('mama_v3', JSON.stringify(expenses));
+        localStorage.setItem('limit_v3', budgetLimit);
     }
 
-    document.getElementById('myApp').onsubmit = (e) => {
+    document.getElementById('mamaForm').onsubmit = (e) => {
         e.preventDefault();
-        const t = document.getElementById('type').value;
-        const a = parseFloat(document.getElementById('amt').value);
-        
-        data.push({ t, a });
-        document.getElementById('amt').value = '';
-        refresh();
+        const c = document.getElementById('category').value;
+        const a = parseFloat(document.getElementById('amount').value);
+        expenses.push({ c, a });
+        document.getElementById('amount').value = '';
+        update();
     };
 
     document.getElementById('limit').oninput = (e) => {
-        myLimit = e.target.value;
-        refresh();
+        budgetLimit = e.target.value;
+        update();
     };
 
     function sendToPapa() {
-        if(data.length === 0) return alert("مفيش مصاريف يا ست الكل!");
-        let m = "يا أبو يوسف، ده تقرير بمصاريف البيت النهاردة: %0A";
+        if(expenses.length === 0) return alert("مفيش مصاريف!");
+        let m = "يا أبو يوسف، ده تقرير بمصاريف البيت والدروس: %0A";
         let s = 0;
-        data.forEach(i => { m += `• ${i.t}: ${i.a} ج.م%0A`; s += i.a; });
-        m += `%0A*إجمالي المصاريف: ${s} ج.م*%0Aمع كل التقدير. ❤️`;
+        expenses.forEach(ex => { m += `• ${ex.c}: ${ex.a} ج.م%0A`; s += ex.a; });
+        m += `%0A*الإجمالي: ${s} ج.م*%0Aالميزانية الباقية: ${(budgetLimit - s)} ج.م%0Aمع كل التقدير. ❤️`;
         window.open(`https://wa.me/201013232884?text=${m}`, '_blank');
     }
 
-    document.getElementById('limit').value = myLimit;
-    refresh();
+    document.getElementById('limit').value = budgetLimit;
+    update();
 </script>
 
 </body>
 </html>
+
 
