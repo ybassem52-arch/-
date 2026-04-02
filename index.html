@@ -3,87 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميزانية يوسف - النسخة النهائية الشاملة</title>
+    <title>ميزانية يوسف - نسخة المول الشاملة</title>
     <style>
-        body { font-family: sans-serif; background-color: #f0f4f8; margin: 0; padding: 15px; }
-        .card { max-width: 480px; margin: auto; background: white; padding: 20px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 10px solid #2563eb; }
-        h1 { text-align: center; color: #1e3a8a; font-size: 20px; margin-bottom: 10px; }
-        .budget-box { background: #eff6ff; padding: 15px; border-radius: 15px; text-align: center; margin-bottom: 15px; border: 1px solid #dbeafe; }
-        .search-area { background: #fffbeb; padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 2px solid #fef08a; }
+        body { font-family: sans-serif; background-color: #f1f5f9; margin: 0; padding: 10px; }
+        .card { max-width: 550px; margin: auto; background: white; padding: 20px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); border-top: 12px solid #1e3a8a; }
+        h1 { text-align: center; color: #1e3a8a; font-size: 22px; margin-bottom: 5px; }
+        .sub-title { text-align: center; color: #64748b; font-size: 14px; margin-bottom: 20px; }
+        .budget-box { background: #eff6ff; padding: 15px; border-radius: 20px; text-align: center; margin-bottom: 15px; border: 1px solid #bfdbfe; }
+        .search-area { background: #fffbeb; padding: 10px; border-radius: 15px; margin-bottom: 15px; border: 2px solid #fef08a; }
         input, select, button { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; }
-        .add-btn { background: #2563eb; color: white; border: none; font-weight: bold; cursor: pointer; }
+        .add-btn { background: #1e3a8a; color: white; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .add-btn:hover { background: #1e40af; }
         .wa-btn { background: #22c55e; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 15px; }
-        .history { margin-top: 15px; max-height: 200px; overflow-y: auto; border-top: 2px solid #e2e8f0; }
+        .history { margin-top: 15px; max-height: 300px; overflow-y: auto; border-top: 2px solid #e2e8f0; }
         .item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
-        optgroup { color: #1e40af; background: #eff6ff; font-weight: bold; }
+        optgroup { color: #1e3a8a; background: #f8fafc; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h1>ميزانية ست الكل ❤️ (النسخة الكاملة)</h1>
+    <h1>ميزانية ست الكل ❤️ (نسخة الإبرة للصاروخ)</h1>
+    <div class="sub-title">برمجة يوسف - الإسكندرية 🌊</div>
 
     <div class="budget-box">
         <div style="font-size: 12px; color: #1e40af;">الميزانية المتبقية</div>
-        <div id="rem" style="font-size: 28px; font-weight: bold; color: #15803d;">0 EGP</div>
+        <div id="rem" style="font-size: 32px; font-weight: bold; color: #15803d;">0 EGP</div>
         <input type="number" id="limit" placeholder="حددي ميزانية الشهر" style="text-align: center;">
     </div>
 
     <div class="search-area">
-        <input type="text" id="searchInput" onkeyup="searchMenu()" placeholder="🔍 ابحثي عن (رياضة، مكة، كهرباء، كاري، طماطم...)">
+        <input type="text" id="searchInput" onkeyup="searchMenu()" placeholder="🔍 ابحثي عن أي حاجة في مصر (بامية، سلك، مكة، لحمة...)">
     </div>
 
     <form id="expenseForm">
-        <select id="itemSelect" size="10" style="height: 400px;">
-            <optgroup label="📚 دروس يوسف (كل مادة لوحدها)">
-                <option value="درس لغة عربية 📖">درس لغة عربية</option>
-                <option value="درس لغة إنجليزية 🔤">درس لغة إنجليزية</option>
-                <option value="درس رياضيات 🔢">درس رياضيات</option>
-                <option value="درس علوم / ساينس 🧪">درس علوم / ساينس</option>
-                <option value="درس دراسات اجتماعية 🌍">درس دراسات اجتماعية</option>
-                <option value="درس تكنولوجيا ICT 💻">درس ICT</option>
-                <option value="درس لغة فرنسية 🇫🇷">درس لغة فرنسية</option>
-                <option value="درس تربية دينية 🕋">درس تربية دينية</option>
-                <option value="ملازم وكتب خارجية 📝">ملازم وكتب خارجية</option>
+        <select id="itemSelect" size="10" style="height: 450px;">
+            <optgroup label="🥩 جزارة وطيور (منفصلة)">
+                <option value="لحمة بلدي 🥩">لحمة بلدي</option>
+                <option value="لحمة مفرومة 🍛">لحمة مفرومة</option>
+                <option value="بفتيك 🥩">بفتيك</option>
+                <option value="كبدة بلدي 🍳">كبدة بلدي</option>
+                <option value="فراخ بيضاء 🍗">فراخ بيضاء</option>
+                <option value="فراخ بلدي 🐓">فراخ بلدي</option>
+                <option value="بانيه 🍗">بانيه</option>
+                <option value="وراك فراخ 🍗">وراك فراخ</option>
+                <option value="حمام 🐦">حمام</option>
+                <option value="أرانب 🐰">أرانب</option>
+                <option value="بط 🦆">بط</option>
+                <option value="سجق/برجر 🌭">سجق أو برجر</option>
+            </optgroup>
+            <optgroup label="🍚 بقالة ونشويات (منفصلة)">
+                <option value="أرز 🍚">أرز</option>
+                <option value="مكرونة قلم 🍝">مكرونة قلم</option>
+                <option value="مكرونة اسباجيتي 🍝">مكرونة اسباجيتي</option>
+                <option value="مكرونة لسان عصفور 🥣">مكرونة لسان عصفور</option>
+                <option value="مكرونة شعرية 🍜">مكرونة شعرية</option>
+                <option value="عدس أصفر 🥣">عدس أصفر</option>
+                <option value="عدس بجبة 🍛">عدس بجبة</option>
+                <option value="فول تدميس 🥘">فول تدميس</option>
+                <option value="لوبيا/فاصوليا بيضاء ⚪">لوبيا أو فاصوليا</option>
+                <option value="سكر 🍬">سكر</option>
+                <option value="شاي ☕">شاي</option>
+                <option value="قهوة/نسكافيه ☕">قهوة أو نسكافيه</option>
+            </optgroup>
+            <optgroup label="🍳 زيوت وسمنة وصلصة">
+                <option value="زيت طعام 🍶">زيت طعام</option>
+                <option value="زيت زيتون 🫒">زيت زيتون</option>
+                <option value="سمنة 🧈">سمنة</option>
+                <option value="زبدة 🧈">زبدة</option>
+                <option value="صلصة طماطم 🥫">صلصة طماطم</option>
+                <option value="خل 🍶">خل</option>
+            </optgroup>
+            <optgroup label="🥛 ألبان وجبن (الفطار)">
+                <option value="لبن 🥛">لبن</option>
+                <option value="جبنة بيضاء 🧀">جبنة بيضاء</option>
+                <option value="جبنة رومي 🧀">جبنة رومي</option>
+                <option value="لانشون 🥓">لانشون</option>
+                <option value="بيض أحمر/أبيض 🥚">بيض</option>
+                <option value="زبادي 🍧">زبادي</option>
+                <option value="حلاوة طحينية 🍯">حلاوة طحينية</option>
+                <option value="عسل نحل/أسود 🍯">عسل</option>
+            </optgroup>
+            <optgroup label="🥦 خضروات الطبيخ (منفصلة)">
+                <option value="طماطم 🍅">طماطم</option>
+                <option value="بطاطس 🥔">بطاطس</option>
+                <option value="بصل 🧅">بصل</option>
+                <option value="ثوم 🧄">ثوم</option>
+                <option value="خيار 🥒">خيار</option>
+                <option value="بامية 🥗">بامية</option>
+                <option value="ملوخية 🌿">ملوخية</option>
+                <option value="قلقاس 🍠">قلقاس</option>
+                <option value="كوسة 🥒">كوسة</option>
+                <option value="فاصوليا خضراء 🟢">فاصوليا خضراء</option>
+                <option value="بسلة 🟢">بسلة</option>
+                <option value="باذنجان 🍆">باذنجان</option>
+                <option value="جزر 🥕">جزر</option>
+                <option value="ليمون 🍋">ليمون</option>
+                <option value="خضرة محشي 🥬">خضرة محشي</option>
+            </optgroup>
+            <optgroup label="🍎 فواكه (منفصلة)">
+                <option value="بطيخ 🍉">بطيخ</option>
+                <option value="موز 🍌">موز</option>
+                <option value="تفاح 🍎">تفاح</option>
+                <option value="برتقال 🍊">برتقال</option>
+                <option value="فراولة 🍓">فراولة</option>
+                <option value="مانجو 🥭">مانجو</option>
+                <option value="جوافة 🍈">جوافة</option>
+                <option value="يوسفي 🍊">يوسفي</option>
+                <option value="عنب 🍇">عنب</option>
+            </optgroup>
+            <optgroup label="🧂 عطارة وبهارات (الإبرة)">
+                <option value="ملح 🧂">ملح</option>
+                <option value="فلفل أسود 🖤">فلفل أسود</option>
+                <option value="كمون 🌿">كمون</option>
+                <option value="كزبرة 🌿">كزبرة</option>
+                <option value="شطة 🔥">شطة</option>
+                <option value="كاري/كركم 🌕">كاري أو كركم</option>
+                <option value="بابريكا 🌶️">بابريكا</option>
+                <option value="زعتر 🌿">زعتر</option>
+                <option value="مرقة دجاج/لحمة 🍲">مرقة</option>
+                <option value="فيجيتار/دقيق 🍗">فيجيتار أو دقيق</option>
+                <option value="بيكنج بودر/فانيليا 🍰">بيكنج بودر وفانيليا</option>
+            </optgroup>
+            <optgroup label="🧼 منظفات وأدوات منزلية">
+                <option value="مسحوق غسيل 🧼">مسحوق غسيل</option>
+                <option value="صابون سائل 🧴">صابون سائل</option>
+                <option value="كلور/ديتول 🧪">كلور أو ديتول</option>
+                <option value="مناديل ورق 🧻">مناديل ورق</option>
+                <option value="سلك مواعين 🧽">سلك مواعين</option>
+                <option value="إبرة وخيط 🧵">إبرة وخيط (أدوات خياطة)</option>
             </optgroup>
             <optgroup label="💰 المصروف الشخصي">
                 <option value="مصروف يوسف 👦">مصروف يوسف</option>
                 <option value="مصروف مكة 👧">مصروف مكة</option>
                 <option value="مصروف روضة 👧">مصروف روضة</option>
             </optgroup>
-            <optgroup label="⚡ الفواتير والاشتراكات">
-                <option value="فاتورة الكهرباء ⚡">فاتورة الكهرباء</option>
-                <option value="فاتورة المياه 🚰">فاتورة المياه</option>
-                <option value="فاتورة الغاز 🔥">فاتورة الغاز</option>
-                <option value="فاتورة الإنترنت 🌐">فاتورة الإنترنت</option>
-                <option value="شحن رصيد موبايل 📱">شحن رصيد موبايل</option>
-                <option value="فاتورة التليفون الأرضي ☎️">فاتورة التليفون الأرضي</option>
+            <optgroup label="📚 دروس يوسف (كل مادة)">
+                <option value="درس لغة عربية 📖">عربي</option>
+                <option value="درس لغة إنجليزية 🔤">إنجليزي</option>
+                <option value="درس رياضيات 🔢">رياضيات</option>
+                <option value="درس ساينس 🧪">ساينس</option>
+                <option value="درس دراسات 🌍">دراسات</option>
+                <option value="درس ICT 💻">ICT</option>
+                <option value="ملازم وكتب 📝">ملازم وكتب</option>
             </optgroup>
-            <optgroup label="🧂 العطارة والبهارات (منفصلة)">
-                <option value="ملح 🧂">ملح</option>
-                <option value="فلفل أسود 🖤">فلفل أسود</option>
-                <option value="شطة 🔥">شطة</option>
-                <option value="كاري 🌕">كاري</option>
-                <option value="السبع بهارات ✨">السبع بهارات</option>
-                <option value="مرقة دجاج 🍲">مرقة دجاج</option>
-                <option value="مرقة لحمة 🍖">مرقة لحمة</option>
-                <option value="زيت طعام 🍶">زيت طعام</option>
-                <option value="فيجيتار 🍗">فيجيتار</option>
-                <option value="دقيق 🥡">دقيق</option>
+            <optgroup label="⚡ فواتير البيت">
+                <option value="كهرباء ⚡">كهرباء</option>
+                <option value="مياه 🚰">مياه</option>
+                <option value="غاز 🔥">غاز</option>
+                <option value="إنترنت 🌐">إنترنت</option>
+                <option value="شحن رصيد 📱">شحن رصيد</option>
             </optgroup>
-            <optgroup label="🥦 مملكة الخضروات">
-                <option value="طماطم 🍅">طماطم</option>
-                <option value="خيار 🥒">خيار</option>
-                <option value="بطاطس 🥔">بطاطس</option>
-                <option value="بصل 🧅">بصل</option>
-                <option value="ثوم 🧄">ثوم</option>
-            </optgroup>
-            <optgroup label="🍎 مملكة الفواكه">
-                <option value="بطيخ 🍉">بطيخ</option>
-                <option value="موز 🍌">موز</option>
-                <option value="تفاح 🍎">تفاح</option>
-                <option value="مانجو 🥭">مانجو</option>
-                <option value="فراولة 🍓">فراولة</option>
+            <optgroup label="🚀 قسم الصواريخ (ألعاب وإلكترونيات)">
+                <option value="لعبة صواريخ/ألعاب ناريرة 🚀">ألعاب نارية/صواريخ</option>
+                <option value="ألعاب أطفال 🧸">ألعاب أطفال</option>
+                <option value="بطاريات 🔋">بطاريات</option>
+                <option value="لمبات كهرباء 💡">لمبات</option>
             </optgroup>
         </select>
         
@@ -102,8 +177,8 @@
 </div>
 
 <script>
-    let list = JSON.parse(localStorage.getItem('mama_final_all_v4')) || [];
-    let myLimit = localStorage.getItem('limit_final_all_v4') || 0;
+    let list = JSON.parse(localStorage.getItem('mama_mall_v6')) || [];
+    let myLimit = localStorage.getItem('limit_mall_v6') || 0;
 
     function searchMenu() {
         let input = document.getElementById("searchInput").value.toUpperCase();
@@ -127,8 +202,8 @@
         spent.innerText = total + " ج.م";
         rem.innerText = (myLimit - total) + ' ج.م';
         rem.style.color = (myLimit - total) < 0 ? "#dc2626" : "#15803d";
-        localStorage.setItem('mama_final_all_v4', JSON.stringify(list));
-        localStorage.setItem('limit_final_all_v4', myLimit);
+        localStorage.setItem('mama_mall_v6', JSON.stringify(list));
+        localStorage.setItem('limit_mall_v6', myLimit);
     }
 
     document.getElementById('expenseForm').onsubmit = (e) => {
@@ -148,10 +223,10 @@
 
     function sendToPapa() {
         if(list.length === 0) return alert("السجل فاضي!");
-        let m = "يا أبو يوسف، ده التقرير النهائي الشامل (كل الدروس، الفواتير، البهارات، مكة وروضة، الخضار، والفاكهة): %0A";
+        let m = "يا أبو يوسف، ده تقرير 'المول الشامل' لكل مصاريف البيت: %0A";
         let s = 0;
         list.forEach(x => { m += `• ${x.c}: ${x.a} ج.م%0A`; s += x.a; });
-        m += `%0A*الإجمالي: ${s} ج.م*%0Aالباقي: ${(myLimit - s)} ج.م%0Aكود المبرمج يوسف! 🚀🦾`;
+        m += `%0A*الإجمالي: ${s} ج.م*%0Aالباقي: ${(myLimit - s)} ج.م%0Aبرمجة يوسف العبقري! 🚀🦾`;
         window.open(`https://wa.me/201013232884?text=${m}`, '_blank');
     }
 
