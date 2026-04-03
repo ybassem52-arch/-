@@ -21,6 +21,41 @@
     </style>
     
 <body>
+<div style="background: #1a1a1a; padding: 20px; border-radius: 15px; margin: 15px; border: 2px solid #ffd700; color: white; text-align: center; font-family: sans-serif;">
+    <h2 style="color: #ffd700; margin-bottom: 15px;">🎯 تحديد هدف مالي</h2>
+    
+    <input type="text" id="goalInput" placeholder="اسم الهدف (مثلاً: مستلزمات المنزل)" style="width: 90%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #444; background: #222; color: white;">
+    
+    <div style="display: flex; justify-content: space-between; width: 93%; margin: auto;">
+        <input type="number" id="priceInput" placeholder="المبلغ المطلوب" style="width: 48%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #444; background: #222; color: white;">
+        <input type="number" id="daysInput" placeholder="المدة (بالأيام)" style="width: 48%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #444; background: #222; color: white;">
+    </div>
+    
+    <button onclick="updateGoal()" style="background: #ffd700; color: black; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 93%; font-size: 16px;">حفظ الهدف المالي 💾</button>
+
+    <hr style="border: 0.5px solid #333; margin: 20px 0;">
+
+    <h3 id="displayGoal" style="color: #ffd700; margin-bottom: 5px;">الهدف الحالي: لم يحدد بعد</h3>
+    <p id="dailySave" style="font-size: 18px; color: #4CAF50; font-weight: bold; margin-top: 5px;">المبلغ المطلوب توفيره يومياً: 0 جنيه</p>
+</div>
+
+<script>
+function updateGoal() {
+    let name = document.getElementById('goalInput').value;
+    let price = document.getElementById('priceInput').value;
+    let days = document.getElementById('daysInput').value;
+
+    if(name && price && days) {
+        document.getElementById('displayGoal').innerText = "الهدف الحالي: " + name;
+        let daily = (price / days).toFixed(2);
+        document.getElementById('dailySave').innerText = "المبلغ المطلوب توفيره يومياً: " + daily + " جنيه";
+        // شيلنا كلمة "عاش يا يوسف" وخليناها رسالة مهنية
+        console.log("تم تحديث البيانات بنجاح"); 
+    } else {
+        alert("يرجى ملء جميع البيانات لحساب الهدف.");
+    }
+}
+</script>
 
 <div class="card">
 <h1 id="appTitle">Moneto - مونيتو</h1>
