@@ -133,11 +133,6 @@
                 <option value="سلك مواعين 🧽">سلك مواعين</option>
                 <option value="إبرة وخيط 🧵">إبرة وخيط (أدوات خياطة)</option>
             </optgroup>
-            <optgroup label="💰 المصروف الشخصي">
-                <option value="مصروف يوسف 👦">مصروف يوسف</option>
-                <option value="مصروف مكة 👧">مصروف مكة</option>
-                <option value="مصروف روضة 👧">مصروف روضة</option>
-            </optgroup>
             <optgroup label="📚 دروس يوسف (كل مادة)">
                 <option value="درس لغة عربية 📖">عربي</option>
                 <option value="درس لغة إنجليزية 🔤">إنجليزي</option>
@@ -251,11 +246,6 @@
         <span>الإجمالي المصروف:</span>
         <span id="spent">0</span>
     </div>
-
-    <div class="history" id="historyList"></div>
-
-    <button class="wa-btn" onclick="sendToPapa()">التقدير لأبو يوسف 💌</button>
-</div>
 <button onclick="clearAll()" style="background: #ef4444; color: white; border: none; padding: 10px; border-radius: 12px; margin-top: 10px; width: 100%; font-weight: bold; cursor: pointer;">مسح كل المصاريف 🗑️</button>
 
 <script>
@@ -300,16 +290,8 @@
 
     document.getElementById('limit').oninput = (e) => {
         myLimit = e.target.value;
-        render();
-    };
+        render()
 
-    function sendToPapa() {
-        if(list.length === 0) return alert("السجل فاضي!");
-        let m = "يا أبو يوسف، ده تقرير 'المول الشامل' لكل مصاريف البيت: %0A";
-        let s = 0;
-        list.forEach(x => { m += `• ${x.c}: ${x.a} ج.م%0A`; s += x.a; });
-        m += `%0A*الإجمالي: ${s} ج.م*%0Aالباقي: ${(myLimit - s)} ج.م%0Aبرمجة يوسف العبقري! 🚀🦾`;
-        window.open(`https://wa.me/201013232884?text=${m}`, '_blank');
     }
 
     document.getElementById('limit').value = myLimit;
@@ -326,7 +308,6 @@
         title.innerText = "Moneto - Smart Budget";
         sub.innerText = "Developed by Yousef 🚀";
         addBtn.innerText = "Add Expense ➕";
-        waBtn.innerText = "Send Report to Papa 💌";
         document.getElementById('searchInput').placeholder = "🔍 Search (Tea, Fish, Sugar...)";
         document.getElementById('price').placeholder = "Price";
         document.getElementById('limit').placeholder = "Set Budget";
@@ -335,7 +316,6 @@
         title.innerText = "مونيتو - الميزانية الذكية";
         sub.innerText = "برمجة يوسف - مبرمج الإسكندرية 🌊";
         addBtn.innerText = "إضافة للمصاريف ➕";
-        waBtn.innerText = "التقدير لأبو يوسف 💌";
         document.getElementById('searchInput').placeholder = "🔍 ابحثي عن (شاي، سمك، سكر...)";
         document.getElementById('price').placeholder = "المبلغ المطلوب";
         document.getElementById('limit').placeholder = "حددي الميزانية";
