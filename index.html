@@ -19,7 +19,7 @@
         .item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
         optgroup { color: #1e3a8a; background: #f8fafc; font-weight: bold; }
     </style>
-    
+</head>
 <body>
 
 <div class="card">
@@ -245,6 +245,7 @@
         <span>الإجمالي المصروف:</span>
         <span id="spent">0</span>
     </div>
+    <div class="history" id="historyList"></div>
 <button onclick="clearAll()" style="background: #ef4444; color: white; border: none; padding: 10px; border-radius: 12px; margin-top: 10px; width: 100%; font-weight: bold; cursor: pointer;">مسح كل المصاريف 🗑️</button>
 
 <script>
@@ -323,7 +324,7 @@
 function clearAll() {
     if(confirm("هل أنتي متأكدة من مسح كل المصاريف؟")) {
         list = [];
-        localStorage.removeItem('mama_final_v13');
+        localStorage.removeItem('mama_mall_v6');
         render();
     }
 }
