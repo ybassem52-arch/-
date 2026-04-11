@@ -275,22 +275,46 @@
     <option value="حلاوة طحينية">حلاوة طحينية</option>
 </optgroup>
         </select>
-        
         <input type="number" id="price" placeholder="المبلغ المطلوب" required>
         <button type="submit" class="add-btn">إضافة للمصاريف ➕</button>
     </form>
-
     <div style="margin-top: 15px; font-weight: bold; color: #dc2626; display: flex; justify-content: space-between;">
-        <span>الإجمالي المصروف:</span>
-        <span id="spent">0</span>
+        <span>الإجمالي المصروف:</span><span id="spent">0</span>
     </div>
     <div class="history" id="historyList"></div>
-<button onclick="clearAll()" style="background: #ef4444; color: white; border: none; padding: 10px; border-radius: 12px; margin-top: 10px; width: 100%; font-weight: bold; cursor: pointer;">مسح كل المصاريف 🗑️</button>
-
+    <button onclick="clearAll()" style="background: #ef4444; color: white; border: none; padding: 10px; border-radius: 12px; margin-top: 10px; width: 100%; cursor: pointer;">مسح كل المصاريف 🗑️</button>
+</div>
+<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth-compat.js"></script>
 <script>
+    const firebaseConfig = { apiKey: "AIzaSyCpwcIgEsaG_lEhC6Yp6nQ__spGj_ZqnYY", authDomain: "monito-c4291.firebaseapp.com", projectId: "monito-c4291", storageBucket: "monito-c4291.firebasestorage.app", appId: "1:366796127553:web:a840f751c322000248b5c0" };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    function loginWithGoogle() { const provider = new firebase.auth.GoogleAuthProvider(); auth.signInWithPopup(provider).catch(err => alert(err.message)); }
+    auth.onAuthStateChanged(user => {
+        const section = document.getElementById('auth-section');
+        if (user) { section.innerHTML = `<span>أهلاً ${user.displayName.split(' ')[0]} 👋</span> <button onclick="auth.signOut()" style="background:gray; font-size:10px; width:auto; padding:5px 10px; margin-right:10px; border:none; color:white; border-radius:5px;">خروج</button>`; }
+        else { section.innerHTML = `<button onclick="loginWithGoogle()">تسجيل دخول Google 🚀</button>`; }
+    });
+    const toggle = document.getElementById('dark-mode-toggle');
+    toggle.addEventListener('change', function() { const theme = this.checked ? 'dark' : 'light'; document.documentElement.setAttribute('data-theme', theme); localStorage.setItem('monito-theme', theme); });
+    if (localStorage.getItem('monito-theme') === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); toggle.checked = true; }
     let list = JSON.parse(localStorage.getItem('mama_mall_v6')) || [];
     let myLimit = localStorage.getItem('limit_mall_v6') || 0;
-
+    function render() {
+        const hist = document.getElementById('historyList'); const spent = document.getElementById('spent'); const rem = document.getElementById('rem');
+        hist.innerHTML = ''; let total = 0;
+        list.slice().reverse().forEach(x => { total += x.a; hist.innerHTML += `<div class="item"><span>${x.c}</span><b>${x.a} ج.م</b></div>`; });
+        spent.innerText = total + " ج.م"; rem.innerText = (myLimit - total) + ' ج.م';
+        rem.style.color = (myLimit - total) < 0 ? "#dc2626" : "#15803d";
+        localStorage.setItem('mama_mall_v6', JSON.stringify(list)); localStorage.setItem('limit_mall_v6', myLimit);
+    }
+    document.getElementById('expenseForm').onsubmit = (e) => {
+        e.preventDefault(); const c = document.getElementById('itemSelect').value; const a = parseFloat(document.getElementById('price').value);
+        if(!c) return alert("اختار الصنف!"); list.push({ c, a }); document.getElementById('price').value = ''; render();
+    };
+    document.getElementById('limit').oninput = (e) => { myLimit = e.target.value; render(); };
+    document.getElementById('limit').value = myLimit; render();
     function searchMenu() {
         let input = document.getElementById("searchInput").value.toUpperCase();
         let options = document.getElementById("itemSelect").options;
@@ -299,113 +323,7 @@
             options[i].style.display = txt.toUpperCase().indexOf(input) > -1 ? "" : "none";
         }
     }
-
-    function render() {
-        const hist = document.getElementById('historyList');
-        const spent = document.getElementById('spent');
-        const rem = document.getElementById('rem');
-        hist.innerHTML = '';
-        let total = 0;
-        list.slice().reverse().forEach(x => {
-            total += x.a;
-            hist.innerHTML += `<div class="item"><span>${x.c}</span><b>${x.a} ج.م</b></div>`;
-        });
-        spent.innerText = total + " ج.م";
-        rem.innerText = (myLimit - total) + ' ج.م';
-        rem.style.color = (myLimit - total) < 0 ? "#dc2626" : "#15803d";
-        localStorage.setItem('mama_mall_v6', JSON.stringify(list));
-        localStorage.setItem('limit_mall_v6', myLimit);
-    }
-
-    document.getElementById('expenseForm').onsubmit = (e) => {
-        e.preventDefault();
-        const c = document.getElementById('itemSelect').value;
-        const a = parseFloat(document.getElementById('price').value);
-        if(!c) return alert("اختاري الصنف الأول!");
-        list.push({ c, a });
-        document.getElementById('price').value = '';
-        render();
-    };
-
-    document.getElementById('limit').oninput = (e) => {
-        myLimit = e.target.value;
-        render()
-
-    }
-
-    document.getElementById('limit').value = myLimit;
-    render();
-  function changeLang() {
-    const lang = document.getElementById('langSwitch').value;
-    const title = document.getElementById('appTitle');
-    const sub = document.getElementById('subTitle');
-    const addBtn = document.querySelector('.add-btn');
-    const waBtn = document.querySelector('.wa-btn');
-
-    if (lang === 'en') {
-        document.body.dir = 'ltr';
-        title.innerText = "Moneto - Smart Budget";
-        sub.innerText = "Developed by Yousef 🚀";
-        addBtn.innerText = "Add Expense ➕";
-        document.getElementById('searchInput').placeholder = "🔍 Search (Tea, Fish, Sugar...)";
-        document.getElementById('price').placeholder = "Price";
-        document.getElementById('limit').placeholder = "Set Budget";
-    } else {
-        document.body.dir = 'rtl';
-        title.innerText = "مونيتو - الميزانية الذكية";
-        sub.innerText = "برمجة يوسف - مبرمج الإسكندرية 🌊";
-        addBtn.innerText = "إضافة للمصاريف ➕";
-        document.getElementById('searchInput').placeholder = "🔍 ابحثي عن (شاي، سمك، سكر...)";
-        document.getElementById('price').placeholder = "المبلغ المطلوب";
-        document.getElementById('limit').placeholder = "حددي الميزانية";
-    }
-}
-function clearAll() {
-    if(confirm("هل أنتي متأكدة من مسح كل المصاريف؟")) {
-        list = [];
-        localStorage.removeItem('mama_mall_v6');
-        render();
-    }
-}
-
-</script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-firestore-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-firestore-compat.js"></script>
-
-<script>
-  // 2. إعدادات مشروعك (اللي إنت لسه باعتها)
-  const firebaseConfig = {
-    apiKey: "AIzaSyCpwcIgEsaG_lEhC6Yp6nQ__spGj_ZqnYY",
-    authDomain: "monito-c4291.firebaseapp.com",
-    projectId: "monito-c4291",
-    storageBucket: "monito-c4291.firebasestorage.app",
-    messagingSenderId: "366796127553",
-    appId: "1:366796127553:web:a840f751c322000248b5c0",
-    measurementId: "G-DVM2YGSHPG"
-  };
-
-  // 3. تشغيل الفايربيز
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-
-  // 4. دالة تسجيل الدخول (اللي مستر سامح هيجربها)
-  function loginWithGoogle() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      // دي أهم حتة عشان ما تطلعش الرسالة "Invalid"
-      auth.signInWithPopup(provider).then((result) => {
-          console.log("تم تسجيل الدخول!");
-      }).catch((error) => {
-          console.error("خطأ:", error.code);
-          alert("تأكد من إضافة رابط الموقع في الـ Authorized Domains داخل Firebase");
-      });
-  }
-</script>
+    function clearAll() { if(confirm("مسح الكل؟")) { list = []; render(); } }
 </script>
 </body>
 </html>
