@@ -287,6 +287,18 @@
 <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth-compat.js"></script>
 <script>
+        // إجبار الفايربيز على استخدام الذاكرة الدائمة عشان "الخازوق" ده ميتكررش
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+
+    function loginWithGoogle() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        // جربنا الـ Redirect وطلع خازوق، نرجع للـ Popup بس مع الـ Persistence الجديد
+        auth.signInWithPopup(provider).catch(err => {
+            console.error(err);
+            // لو الـ Popup لسه بيعاند، نستخدم الـ Redirect كحل أخير
+            auth.signInWithRedirect(provider);
+        });
+    }
     const firebaseConfig = { apiKey: "AIzaSyCpwcIgEsaG_lEhC6Yp6nQ__spGj_ZqnYY", authDomain: "monito-c4291.firebaseapp.com", projectId: "monito-c4291", storageBucket: "monito-c4291.firebasestorage.app", appId: "1:366796127553:web:a840f751c322000248b5c0" };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
