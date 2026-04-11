@@ -359,5 +359,53 @@ function clearAll() {
 }
 
 </script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-firestore-compat.js"></script>
+
+<script>
+  // الكود بتاع مشروعك اللي إنت طلعته يا بطل
+  const firebaseConfig = {
+    apiKey: "AIzaSyCpwcIgEsaG_lEhC6Yp6nQ__spGj_ZqnYY",
+    authDomain: "monito-c4291.firebaseapp.com",
+    projectId: "monito-c4291",
+    storageBucket: "monito-c4291.firebasestorage.app",
+    messagingSenderId: "366796127553",
+    appId: "1:366796127553:web:a840f751c322000248b5c0",
+    measurementId: "G-DVM2YGSHPG"
+  };
+
+  // تشغيل فايربيز
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  // دالة تسجيل الدخول
+  function loginWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider).then((result) => {
+          console.log("Logged in!");
+      }).catch((error) => {
+          alert("خطأ في الدخول: " + error.message);
+      });
+  }
+
+  // مراقبة حالة المستخدم (عشان يغير الشكل أول ما يدخل)
+  auth.onAuthStateChanged((user) => {
+      const authSection = document.getElementById('auth-section');
+      if (user) {
+          authSection.innerHTML = `
+              <div style="display: flex; align-items: center; justify-content: center; gap: 10px; flex-direction: column;">
+                  <span style="color: #2c3e50; font-weight: bold;">أهلاً ${user.displayName.split(' ')[0]} 👋</span>
+                  <button onclick="auth.signOut()" style="background:none; border:none; color:red; text-decoration:underline; cursor:pointer; font-size:12px;">خروج</button>
+              </div>`;
+      } else {
+          authSection.innerHTML = `
+              <button onclick="loginWithGoogle()" style="background-color: #2c3e50; color: white; border: none; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-family: 'Cairo';">
+                  تسجيل دخول لحفظ بياناتك 🚀
+              </button>`;
+      }
+  });
+</script>
 </body>
 </html>
