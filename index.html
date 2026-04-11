@@ -274,72 +274,135 @@
     <option value="عسل أسود">عسل أسود</option>
     <option value="حلاوة طحينية">حلاوة طحينية</option>
 </optgroup>
-        </select>
+                </select>
         <input type="number" id="price" placeholder="المبلغ المطلوب" required>
         <button type="submit" class="add-btn">إضافة للمصاريف ➕</button>
     </form>
+
     <div style="margin-top: 15px; font-weight: bold; color: #dc2626; display: flex; justify-content: space-between;">
-        <span>الإجمالي المصروف:</span><span id="spent">0</span>
+        <span>الإجمالي المصروف:</span><span id="spent">0 ج.م</span>
     </div>
     <div class="history" id="historyList"></div>
     <button onclick="clearAll()" style="background: #ef4444; color: white; border: none; padding: 10px; border-radius: 12px; margin-top: 10px; width: 100%; cursor: pointer;">مسح كل المصاريف 🗑️</button>
 </div>
-<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth-compat.js"></script>
-<script>
-        // إجبار الفايربيز على استخدام الذاكرة الدائمة عشان "الخازوق" ده ميتكررش
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-// الحركة دي بتخلي المتصفح يحس إن فيه حاجة اتغيرت في الذاكرة فيحدث نفسه مرة واحدة بس
-if (!location.search.includes('v=2')) {
-    location.replace(location.pathname + '?v=2');
-}
 
-    function loginWithGoogle() {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        // جربنا الـ Redirect وطلع خازوق، نرجع للـ Popup بس مع الـ Persistence الجديد
-        auth.signInWithPopup(provider).catch(err => {
-            console.error(err);
-            // لو الـ Popup لسه بيعاند، نستخدم الـ Redirect كحل أخير
-            auth.signInWithRedirect(provider);
-        });
-    }
-    const firebaseConfig = { apiKey: "AIzaSyCpwcIgEsaG_lEhC6Yp6nQ__spGj_ZqnYY", authDomain: "monito-c4291.firebaseapp.com", projectId: "monito-c4291", storageBucket: "monito-c4291.firebasestorage.app", appId: "1:366796127553:web:a840f751c322000248b5c0" };
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+    // 1. إعدادات فايربيز
+    const firebaseConfig = {
+        apiKey: "AIzaSyCpwcIgEsaG_lEhC6Yp6nQ__spGj_ZqnYY",
+        authDomain: "monito-c4291.firebaseapp.com",
+        projectId: "monito-c4291",
+        storageBucket: "monito-c4291.appspot.com",
+        appId: "1:366796127553:web:a840f751c322000248b5c0"
+    };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    function loginWithGoogle() { const provider = new firebase.auth.GoogleAuthProvider(); auth.signInWithPopup(provider).catch(err => alert(err.message)); }
+    const db = firebase.firestore();
+
+    let list = [];
+    let myLimit = 0;
+    let currentUser = null;
+
+    // 2. تفعيل الوضع الليلي (بإصلاح السويتش)
+    const toggle = document.getElementById('dark-mode-toggle');
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('monito-theme', theme);
+        toggle.checked = (theme === 'dark');
+    }
+
+    toggle.addEventListener('change', () => {
+        applyTheme(toggle.checked ? 'dark' : 'light');
+    });
+
+    // تحميل الثيم المحفوظ
+    if (localStorage.getItem('monito-theme') === 'dark') applyTheme('dark');
+
+    // 3. تسجيل الدخول
+    function loginWithGoogle() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider).catch(() => auth.signInWithRedirect(provider));
+    }
+
+    // 4. مراقبة حالة المستخدم (ظهور الزرار)
     auth.onAuthStateChanged(user => {
         const section = document.getElementById('auth-section');
-        if (user) { section.innerHTML = `<span>أهلاً ${user.displayName.split(' ')[0]} 👋</span> <button onclick="auth.signOut()" style="background:gray; font-size:10px; width:auto; padding:5px 10px; margin-right:10px; border:none; color:white; border-radius:5px;">خروج</button>`; }
-        else { section.innerHTML = `<button onclick="loginWithGoogle()">تسجيل دخول Google 🚀</button>`; }
+        if (user) {
+            currentUser = user;
+            section.innerHTML = `<span>أهلاً ${user.displayName.split(' ')[0]} 👋</span> <button onclick="auth.signOut()" style="background:#666; font-size:10px; border:none; color:white; padding:5px; border-radius:5px; margin-right:5px;">خروج</button>`;
+            loadData();
+        } else {
+            currentUser = null;
+            section.innerHTML = `<button onclick="loginWithGoogle()" style="background:#4285F4; color:white; border:none; padding:8px 15px; border-radius:20px; cursor:pointer; font-weight:bold;">دخول بجوجل 🚀</button>`;
+            list = []; render();
+        }
     });
-    const toggle = document.getElementById('dark-mode-toggle');
-    toggle.addEventListener('change', function() { const theme = this.checked ? 'dark' : 'light'; document.documentElement.setAttribute('data-theme', theme); localStorage.setItem('monito-theme', theme); });
-    if (localStorage.getItem('monito-theme') === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); toggle.checked = true; }
-    let list = JSON.parse(localStorage.getItem('mama_mall_v6')) || [];
-    let myLimit = localStorage.getItem('limit_mall_v6') || 0;
-    function render() {
-        const hist = document.getElementById('historyList'); const spent = document.getElementById('spent'); const rem = document.getElementById('rem');
-        hist.innerHTML = ''; let total = 0;
-        list.slice().reverse().forEach(x => { total += x.a; hist.innerHTML += `<div class="item"><span>${x.c}</span><b>${x.a} ج.م</b></div>`; });
-        spent.innerText = total + " ج.م"; rem.innerText = (myLimit - total) + ' ج.م';
-        rem.style.color = (myLimit - total) < 0 ? "#dc2626" : "#15803d";
-        localStorage.setItem('mama_mall_v6', JSON.stringify(list)); localStorage.setItem('limit_mall_v6', myLimit);
+
+    // 5. حفظ وتحميل البيانات
+    function saveData() {
+        if (currentUser) {
+            db.collection("users").doc(currentUser.uid).set({ expenses: list, limit: myLimit });
+        }
     }
+
+    function loadData() {
+        db.collection("users").doc(currentUser.uid).get().then(doc => {
+            if (doc.exists) {
+                list = doc.data().expenses || [];
+                myLimit = doc.data().limit || 0;
+                document.getElementById('limit').value = myLimit;
+                render();
+            }
+        });
+    }
+
+    // 6. العمليات الحسابية والـ Render
+    function render() {
+        const hist = document.getElementById('historyList');
+        const spent = document.getElementById('spent');
+        const rem = document.getElementById('rem');
+        hist.innerHTML = '';
+        let total = 0;
+        list.slice().reverse().forEach(x => {
+            total += x.a;
+            hist.innerHTML += `<div class="item"><span>${x.c}</span><b>${x.a} ج.م</b></div>`;
+        });
+        spent.innerText = total + " ج.م";
+        rem.innerText = (myLimit - total) + ' ج.م';
+        rem.style.color = (myLimit - total) < 0 ? "#dc2626" : "#15803d";
+    }
+
     document.getElementById('expenseForm').onsubmit = (e) => {
-        e.preventDefault(); const c = document.getElementById('itemSelect').value; const a = parseFloat(document.getElementById('price').value);
-        if(!c) return alert("اختار الصنف!"); list.push({ c, a }); document.getElementById('price').value = ''; render();
+        e.preventDefault();
+        const c = document.getElementById('itemSelect').value;
+        const a = parseFloat(document.getElementById('price').value);
+        if(!c || isNaN(a)) return;
+        list.push({ c, a });
+        document.getElementById('price').value = '';
+        render();
+        saveData();
     };
-    document.getElementById('limit').oninput = (e) => { myLimit = e.target.value; render(); };
-    document.getElementById('limit').value = myLimit; render();
+
+    document.getElementById('limit').oninput = (e) => { 
+        myLimit = e.target.value; 
+        render(); 
+        saveData(); 
+    };
+
+    function clearAll() { 
+        if(confirm("مسح الكل؟")) { list = []; render(); saveData(); } 
+    }
+
     function searchMenu() {
         let input = document.getElementById("searchInput").value.toUpperCase();
         let options = document.getElementById("itemSelect").options;
         for (let i = 0; i < options.length; i++) {
-            let txt = options[i].text || options[i].innerText;
+            let txt = options[i].text;
             options[i].style.display = txt.toUpperCase().indexOf(input) > -1 ? "" : "none";
         }
     }
-    function clearAll() { if(confirm("مسح الكل؟")) { list = []; render(); } }
 </script>
-</body>
-</html>
