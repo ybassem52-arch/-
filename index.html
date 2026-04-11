@@ -453,6 +453,13 @@ function clearAll() {
               </button>`;
       }
   });
+    document.getElementById('dark-mode-toggle').addEventListener('change', function() {
+    if (this.checked) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+});
 </script>
 </body>
 </html>
