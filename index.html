@@ -5,83 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monito - مونيتو</title>
     <style>
-        body { font-family: sans-serif; background-color: #f1f5f9; margin: 0; padding: 10px; }
-        .card { max-width: 550px; margin: auto; background: white; padding: 20px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); border-top: 12px solid #1e3a8a; }
-        h1 { text-align: center; color: #1e3a8a; font-size: 22px; margin-bottom: 5px; }
-        .sub-title { text-align: center; color: #64748b; font-size: 14px; margin-bottom: 20px; }
-        .budget-box { background: #eff6ff; padding: 15px; border-radius: 20px; text-align: center; margin-bottom: 15px; border: 1px solid #bfdbfe; }
+        :root { --bg: #f1f5f9; --card-bg: #ffffff; --text-main: #1e3a8a; --text-sub: #64748b; --box-bg: #eff6ff; --border: #cbd5e1; }
+        [data-theme="dark"] { --bg: #121212; --card-bg: #1e1e1e; --text-main: #ffffff; --text-sub: #cbd5e1; --box-bg: #2d2d2d; --border: #444; }
+        body { font-family: sans-serif; background-color: var(--bg); color: var(--text-main); margin: 0; padding: 10px; transition: 0.3s; }
+        .card { max-width: 550px; margin: auto; background: var(--card-bg); padding: 20px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); border-top: 12px solid #1e3a8a; }
+        h1 { text-align: center; color: var(--text-main); font-size: 22px; margin-bottom: 5px; }
+        .sub-title { text-align: center; color: var(--text-sub); font-size: 14px; margin-bottom: 20px; }
+        .budget-box { background: var(--box-bg); padding: 15px; border-radius: 20px; text-align: center; margin-bottom: 15px; border: 1px solid #bfdbfe; }
+        .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #22c55e; }
+        input:checked + .slider:before { transform: translateX(26px); }
         .search-area { background: #fffbeb; padding: 10px; border-radius: 15px; margin-bottom: 15px; border: 2px solid #fef08a; }
-        input, select, button { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; }
-        .add-btn { background: #1e3a8a; color: white; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .add-btn:hover { background: #1e40af; }
-        .wa-btn { background: #22c55e; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        input, select, button { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid var(--border); border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; background: var(--card-bg); color: var(--text-main); }
+        .add-btn { background: #1e3a8a; color: white; border: none; font-weight: bold; cursor: pointer; }
         .history { margin-top: 15px; max-height: 300px; overflow-y: auto; border-top: 2px solid #e2e8f0; }
-        .item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
-        optgroup { color: #1e3a8a; background: #f8fafc; font-weight: bold; }
-        /* ستايل السويتش */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 24px;
-}
-
-.switch input { opacity: 0; width: 0; height: 0; }
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
-  border-radius: 34px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 18px; width: 18px;
-  left: 3px; bottom: 3px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider { background-color: #2c3e50; }
-input:checked + .slider:before { transform: translateX(26px); }
-
-/* ألوان المودات */
-:root { --text-color: #2c3e50; --bg: #f4f7f6; }
-[data-theme="dark"] { --text-color: #ffffff; --bg: #121212; }
-
-body { background-color: var(--bg); color: var(--text-color); transition: 0.3s; }
+        .item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #f1f5f9; font-size: 14px; color: var(--text-main); }
+        #auth-section button { background: #4285F4; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; width: auto; }
     </style>
 </head>
 <body>
 <div class="card">
-<h1 id="appTitle">Monito - مونيتو</h1>
-<div class="sub-title" id="subTitle">Smart Budgeting 🚀</div>
-    <div class="budget-box">
-        <div id="auth-section" style="text-align: center; margin: 15px 0;">
+    <h1>Monito - مونيتو</h1>
+    <div class="sub-title">Smart Budgeting 🚀</div>
+    <div id="auth-section" style="text-align: center; margin-bottom: 15px;"></div>
+    <div style="text-align: center; margin-bottom: 20px;">
+        <label class="switch"><input type="checkbox" id="dark-mode-toggle"><span class="slider round"></span></label>
+        <p style="font-size: 11px; margin-top: 5px;">الوضع الليلي</p>
     </div>
-
-<div style="text-align: center; margin-bottom: 20px;">
-    <label class="switch">
-      <input type="checkbox" id="dark-mode-toggle">
-      <span class="slider round"></span>
-    </label>
-    <p style="font-size: 12px; margin-top: 5px; color: var(--text-color);">تبديل الوضع الليلي</p>
-</div>
+    <div class="budget-box">
         <div style="font-size: 12px; color: #1e40af;">الميزانية المتبقية</div>
         <div id="rem" style="font-size: 32px; font-weight: bold; color: #15803d;">0 EGP</div>
         <input type="number" id="limit" placeholder="حدد ميزانية الشهر" style="text-align: center;">
     </div>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <div class="search-area">
-        <input type="text" id="searchInput" onkeyup="searchMenu()" placeholder="🔍 ابحث عن أي حاجة في مصر (بامية، سلك، مكة، لحمة...)">
+        <input type="text" id="searchInput" onkeyup="searchMenu()" placeholder="🔍 ابحث عن أي حاجة...">
     </div>
     <form id="expenseForm">
-        <select id="itemSelect" size="10" style="height: 450px;">
+        <select id="itemSelect" size="10" style="height: 250px;">
             <optgroup label="🥩 جزارة وطيور (منفصلة)">
                 <option value="لحمة بلدي 🥩">لحمة بلدي</option>
                 <option value="لحمة مفرومة 🍛">لحمة مفرومة</option>
