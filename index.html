@@ -11,7 +11,6 @@
         
         .card { max-width: 550px; margin: auto; background: var(--card-bg); padding: 20px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); border-top: 12px solid #1e3a8a; position: relative; transition: 0.5s; overflow: hidden; }
         
-        /* شريط الـ RGB الرفيع والشيك */
         .rgb-border {
             border: 2px solid transparent !important;
             background-image: linear-gradient(var(--card-bg), var(--card-bg)), conic-gradient(from var(--angle), #ff0000, #00ffff, #00ff00, #ffff00, #ff0000) !important;
@@ -53,8 +52,9 @@
     </div>
 
     <div class="budget-box">
+        <div style="font-size: 12px; color: #1e40af;">الميزانية المتبقية</div>
         <div id="rem" style="font-size: 32px; font-weight: bold; color: #15803d;">0 EGP</div>
-        <input type="number" id="limit" placeholder="حدد ميزانية الشهر" style="text-align: center;">
+        <input type="number" id="limit" oninput="updateLimit(this.value)" placeholder="حدد ميزانية الشهر" style="text-align: center;">
     </div>
 
     <input type="text" id="searchInput" onkeyup="searchMenu()" placeholder="🔍 ابحث عن أي حاجة...">
@@ -290,13 +290,15 @@
     <option value="عسل أسود">عسل أسود</option>
     <option value="حلاوة طحينية">حلاوة طحينية</option>
 </optgroup>
-                                                </select>
+                       </select>
         <input type="number" id="price" placeholder="المبلغ المطلوب">
         <button type="submit" class="add-btn">إضافة للمصاريف ➕</button>
     </form>
 
     <div class="history" id="historyList"></div>
     
+    <button onclick="clearAll()" style="background: #ef4444; color: white; border: none; padding: 10px; border-radius: 12px; margin-top: 10px; width: 100%; cursor: pointer;">مسح كل المصاريف 🗑️</button>
+
     <button id="mode-switcher" onclick="toggleGamingMode()" style="background: linear-gradient(45deg, #00ffcc, #7000ff); color: white; border: none; padding: 12px; border-radius: 12px; margin-top: 15px; cursor: pointer; font-weight: bold;">
        الانتقال إلى وضع الجيمنج 🎮
     </button>
@@ -336,7 +338,6 @@
 
     function toggleGamingMode() {
         const select = document.getElementById('itemSelect');
-        const body = document.body;
         const btn = document.getElementById('mode-switcher');
         const title = document.getElementById('mainTitle'); 
         const card = document.getElementById('mainCard');
@@ -351,21 +352,15 @@
             title.innerHTML = "Monito Gaming 🎮";
             title.classList.add('gaming-title');
             btn.innerText = "العودة للمصاريف العادية 🏠";
-
             select.innerHTML = `
                 <option value="">اختار اللي صرفته يا جيمنج 🕹️</option>
                 <optgroup label="🎮 بلاي ستيشن">
                     <option value="بلاي ستيشن 3">بلاي ستيشن 3</option>
                     <option value="بلاي ستيشن 4">بلاي ستيشن 4</option>
-                    <option value="بلاي ستيشن 5">بلاي ستيشن 5</option>
                 </optgroup>
                 <optgroup label="🍜 منيو الاندومي">
                     <option value="اندومي كوري 🔥">اندومي كوري 🔥</option>
                     <option value="اندومي خضار/لحمة">اندومي خضار/لحمة</option>
-                </optgroup>
-                <optgroup label="🍟 سناكس">
-                    <option value="شيبسي / كرانشي">شيبسي / كرانشي</option>
-                    <option value="بيبسي / كولا">بيبسي / كولا</option>
                 </optgroup>`;
         } else {
             card.classList.remove('rgb-border');
@@ -381,11 +376,23 @@
         const rem = document.getElementById('rem');
         hist.innerHTML = '';
         let total = 0;
-        list.slice().reverse().forEach(x => {
+        list.forEach(x => {
             total += x.a;
-            hist.innerHTML += `<div class="item"><span>${x.c}</span><b>${x.a} ج.م</b></div>`;
+            hist.innerHTML = `<div class="item"><span>${x.c}</span><b>${x.a} ج.م</b></div>` + hist.innerHTML;
         });
-        rem.innerText = (myLimit - total) + ' EGP';
+        const finalRem = myLimit - total;
+        rem.innerText = finalRem + ' EGP';
+        rem.style.color = finalRem < 0 ? "#dc2626" : "#15803d";
+    }
+
+    function updateLimit(val) {
+        myLimit = parseFloat(val) || 0;
+        render();
+        saveData();
+    }
+
+    function saveData() {
+        if(currentUser) db.collection("users").doc(currentUser.uid).set({ expenses: list, limit: myLimit });
     }
 
     auth.onAuthStateChanged(user => {
@@ -413,8 +420,17 @@
         if(!c || isNaN(a)) return;
         list.push({ c, a });
         render();
-        if(currentUser) db.collection("users").doc(currentUser.uid).set({ expenses: list, limit: myLimit });
+        saveData();
+        document.getElementById('price').value = '';
     };
+
+    function clearAll() {
+        if(confirm("مسح كل المصاريف؟")) {
+            list = [];
+            render();
+            saveData();
+        }
+    }
 
     function searchMenu() {
         let input = document.getElementById("searchInput").value.toUpperCase();
@@ -427,3 +443,4 @@
 </script>
 </body>
 </html>
+                                             
