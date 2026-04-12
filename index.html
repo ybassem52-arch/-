@@ -9,21 +9,23 @@
         [data-theme="dark"] { --bg: #121212; --card-bg: #1e1e1e; --text-main: #ffffff; --text-sub: #cbd5e1; --box-bg: #2d2d2d; --border: #444; }
         body { font-family: sans-serif; background-color: var(--bg); color: var(--text-main); margin: 0; padding: 10px; transition: 0.3s; }
         
-        .card { max-width: 550px; margin: auto; background: var(--card-bg); padding: 20px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); border-top: 12px solid #1e3a8a; position: relative; transition: 0.5s; overflow: hidden; }
+        .card { max-width: 550px; margin: auto; background: var(--card-bg); padding: 20px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); border-top: 10px solid #1e3a8a; position: relative; transition: 0.5s; }
         
+        /* شريط RGB رفيع جداً (سلك نيون) حوالين الكارت كله */
         .rgb-border {
-            border: 2px solid transparent !important;
+            border: 1.5px solid transparent !important; /* أنحف حاجة ممكنة */
             background-image: linear-gradient(var(--card-bg), var(--card-bg)), conic-gradient(from var(--angle), #ff0000, #00ffff, #00ff00, #ffff00, #ff0000) !important;
             background-origin: border-box !important;
             background-clip: content-box, border-box !important;
             animation: rotate-rgb 3s linear infinite !important;
             border-radius: 30px !important;
+            border-top: 1.5px solid transparent !important; /* عشان يلغي التخانة اللي فوق */
         }
 
         @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
         @keyframes rotate-rgb { to { --angle: 360deg; } }
 
-        .gaming-title { color: #00ffcc !important; text-shadow: 0 0 10px #00ffcc; }
+        .gaming-title { color: #00ffcc !important; text-shadow: 0 0 8px #00ffcc; }
         
         h1 { text-align: center; color: var(--text-main); font-size: 22px; margin-bottom: 5px; }
         .sub-title { text-align: center; color: var(--text-sub); font-size: 14px; margin-bottom: 20px; }
@@ -36,7 +38,7 @@
         input:checked + .slider:before { transform: translateX(26px); }
         input, select, button { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid var(--border); border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; background: var(--card-bg); color: var(--text-main); }
         .add-btn { background: #1e3a8a; color: white; border: none; font-weight: bold; cursor: pointer; }
-        .history { margin-top: 15px; max-height: 300px; overflow-y: auto; border-top: 2px solid #e2e8f0; }
+        .history { margin-top: 15px; max-height: 250px; overflow-y: auto; border-top: 2px solid #e2e8f0; }
         .item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
     </style>
 </head>
@@ -52,7 +54,6 @@
     </div>
 
     <div class="budget-box">
-        <div style="font-size: 12px; color: #1e40af;">الميزانية المتبقية</div>
         <div id="rem" style="font-size: 32px; font-weight: bold; color: #15803d;">0 EGP</div>
         <input type="number" id="limit" oninput="updateLimit(this.value)" placeholder="حدد ميزانية الشهر" style="text-align: center;">
     </div>
