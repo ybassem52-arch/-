@@ -6,74 +6,93 @@
     <title>Monito - مونيتو</title>
     <style>
         :root { 
-            --bg: #f8fafc; 
+            --bg: #f0f2f5; 
             --card-bg: #ffffff; 
-            --text-main: #0f172a; 
-            --text-sub: #64748b; 
-            --box-bg: #f1f5f9; 
-            --border: #e2e8f0; 
-            --accent: #2563eb;
+            --text-main: #1a202c; 
+            --accent: #3b82f6; 
+            --secondary: #10b981;
         }
         [data-theme="dark"] { 
-            --bg: #0f172a; 
-            --card-bg: #1e293b; 
-            --text-main: #f8fafc; 
-            --text-sub: #94a3b8; 
-            --box-bg: #334155; 
-            --border: #475569; 
-            --accent: #38bdf8;
+            --bg: #1a202c; 
+            --card-bg: #2d3748; 
+            --text-main: #f7fafc; 
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text-main); margin: 0; padding: 15px; transition: 0.3s; }
         
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            margin: 0; padding: 20px; transition: 0.3s; 
+        }
+
         .card { 
-            max-width: 500px; margin: auto; background: var(--card-bg); padding: 25px; 
-            border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
-            border: 1px solid var(--border); transition: 0.3s;
+            max-width: 450px; margin: auto; background: var(--card-bg); 
+            padding: 30px; border-radius: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            text-align: center; border: 1px solid rgba(0,0,0,0.05);
         }
 
-        h1 { text-align: center; font-size: 24px; margin-bottom: 5px; color: var(--accent); }
-        .sub-title { text-align: center; color: var(--text-sub); font-size: 14px; margin-bottom: 25px; }
-        
-        .budget-box { background: var(--box-bg); padding: 20px; border-radius: 18px; text-align: center; margin-bottom: 20px; }
-        #rem { font-size: 32px; font-weight: bold; margin-bottom: 10px; }
+        h1 { 
+            font-size: 28px; color: var(--accent); margin-bottom: 5px; 
+            text-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+        }
 
-        .switch-container { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 14px; }
-        .switch { position: relative; display: inline-block; width: 46px; height: 22px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--accent); }
-        input:checked + .slider:before { transform: translateX(24px); }
+        .budget-box { 
+            background: rgba(59, 130, 246, 0.1); 
+            padding: 20px; border-radius: 20px; margin: 20px 0; 
+        }
 
-        input, select, button { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid var(--border); border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; background: var(--card-bg); color: var(--text-main); }
-        .add-btn { background: var(--accent); color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 15px; }
-        .add-btn:active { transform: scale(0.98); }
+        #rem { font-size: 35px; font-weight: 800; color: var(--secondary); display: block; }
 
-        .history { margin-top: 20px; max-height: 200px; overflow-y: auto; }
-        .item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid var(--border); font-size: 15px; }
+        input, select { 
+            width: 100%; padding: 12px; margin: 10px 0; 
+            border: 2px solid #e2e8f0; border-radius: 15px; 
+            font-size: 16px; outline: none; transition: 0.3s;
+            background: var(--card-bg); color: var(--text-main);
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        .btn-add { 
+            background: var(--accent); color: white; border: none; 
+            padding: 15px; border-radius: 15px; font-weight: bold; 
+            cursor: pointer; width: 100%; font-size: 18px; margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-add:active { transform: scale(0.97); }
+
+        .theme-btn { 
+            background: none; border: 1px solid var(--accent); 
+            color: var(--accent); padding: 5px 15px; border-radius: 20px; 
+            cursor: pointer; font-size: 12px; margin-bottom: 15px;
+        }
+
+        .history { margin-top: 25px; text-align: right; max-height: 150px; overflow-y: auto; }
+        .item { 
+            display: flex; justify-content: space-between; 
+            padding: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); 
+        }
     </style>
 </head>
 <body>
+
 <div class="card">
+    <button class="theme-btn" onclick="toggleTheme()">تغيير الوضع 🌓</button>
     <h1>Monito - مونيتو</h1>
-    <div class="sub-title">Smart Budgeting 🚀</div>
+    <p style="color: #718096; font-size: 14px;">محفظتك في جيبك 🚀</p>
 
-    <div id="auth-section" style="text-align: center; margin-bottom: 15px;"></div>
-
-    <div class="switch-container">
-        <span>الوضع الليلي</span>
-        <label class="switch"><input type="checkbox" id="dark-mode-toggle"><span class="slider"></span></label>
-    </div>
+    <div id="auth-section"></div>
 
     <div class="budget-box">
-        <div id="rem">0 EGP</div>
-        <input type="number" id="limit" oninput="updateLimit(this.value)" placeholder="ميزانيتك كام؟" style="text-align: center; border: none; background: transparent; font-size: 18px;">
+        <span id="rem">0 EGP</span>
+        <input type="number" id="limit" oninput="updateLimit(this.value)" placeholder="ميزانيتك كام؟" style="text-align: center; border: none; background: transparent;">
     </div>
 
-    <input type="text" id="searchInput" onkeyup="searchMenu()" placeholder="🔍 ابحث في المنيو...">
+    <input type="text" id="searchInput" onkeyup="searchMenu()" placeholder="🔍 ابحث عن حاجة...">
 
     <form id="expenseForm">
-        <select id="itemSelect" size="8">
+        <select id="itemSelect" size="5">
             <optgroup label="🥩 جزارة وطيور (منفصلة)">
                 <option value="لحمة بلدي 🥩">لحمة بلدي</option>
                 <option value="لحمة مفرومة 🍛">لحمة مفرومة</option>
@@ -302,14 +321,15 @@
     <option value="عسل نحل">عسل نحل</option>
     <option value="عسل أسود">عسل أسود</option>
     <option value="حلاوة طحينية">حلاوة طحينية</option>
-       </optgroup>        </select>
+       </optgroup>        
+                    </select>
         <input type="number" id="price" placeholder="السعر كام؟">
-        <button type="submit" class="add-btn">إضافة للمصاريف ➕</button>
+        <button type="submit" class="btn-add">إضافة للمصاريف ➕</button>
     </form>
 
     <div class="history" id="historyList"></div>
-    
-    <button onclick="clearAll()" style="background: transparent; color: #ef4444; border: 1px solid #ef4444; padding: 8px; border-radius: 12px; margin-top: 15px; width: 100%; cursor: pointer; font-size: 13px;">مسح السجل 🗑️</button>
+
+    <button onclick="clearAll()" style="background:none; border:none; color:#ed64a6; cursor:pointer; margin-top:15px; font-size:13px;">🗑️ مسح السجل</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -330,9 +350,10 @@
 
     let list = []; let myLimit = 0; let currentUser = null;
 
-    document.getElementById('dark-mode-toggle').addEventListener('change', (e) => {
-        document.documentElement.setAttribute('data-theme', e.target.checked ? 'dark' : 'light');
-    });
+    function toggleTheme() {
+        const body = document.documentElement;
+        body.setAttribute('data-theme', body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    }
 
     function render() {
         const hist = document.getElementById('historyList');
@@ -341,7 +362,7 @@
         list.forEach(x => { total += x.a; hist.innerHTML = `<div class="item"><span>${x.c}</span><b>${x.a} ج.م</b></div>` + hist.innerHTML; });
         const finalRem = myLimit - total;
         rem.innerText = finalRem + ' EGP';
-        rem.style.color = finalRem < 0 ? "#ef4444" : "#22c55e";
+        rem.style.color = finalRem < 0 ? "#e53e3e" : "#38a169";
     }
 
     function updateLimit(val) { myLimit = parseFloat(val) || 0; render(); saveData(); }
@@ -350,7 +371,7 @@
     auth.onAuthStateChanged(user => {
         if (user) {
             currentUser = user;
-            document.getElementById('auth-section').innerHTML = `<span>أهلاً يوسف 👋</span> <button onclick="auth.signOut()" style="width:auto; padding:5px; font-size:10px;">خروج</button>`;
+            document.getElementById('auth-section').innerHTML = `<p>أهلاً ${user.displayName.split(' ')[0]} 👋 <span onclick="auth.signOut()" style="cursor:pointer; color:red; font-size:10px;">(خروج)</span></p>`;
             db.collection("users").doc(user.uid).get().then(doc => {
                 if (doc.exists) {
                     list = doc.data().expenses || [];
@@ -360,7 +381,7 @@
                 }
             });
         } else {
-            document.getElementById('auth-section').innerHTML = `<button onclick="auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())" style="width:auto;">دخول بجوجل 🚀</button>`;
+            document.getElementById('auth-section').innerHTML = `<button onclick="auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())" class="btn-add" style="background:#4285f4; margin-bottom:20px;">دخول بجوجل 🚀</button>`;
         }
     });
 
@@ -373,7 +394,7 @@
         document.getElementById('price').value = '';
     };
 
-    function clearAll() { if(confirm("مسح السجل؟")) { list = []; render(); saveData(); } }
+    function clearAll() { if(confirm("أكيد هتمسح كل حاجة؟")) { list = []; render(); saveData(); } }
 
     function searchMenu() {
         let input = document.getElementById("searchInput").value.toUpperCase();
@@ -386,4 +407,3 @@
 </script>
 </body>
 </html>
-                                                              
