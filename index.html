@@ -442,43 +442,66 @@
             options[i].style.display = txt.toUpperCase().indexOf(input) > -1 ? "" : "none";
         }
     }
-    function toggleGamingMode() {
+    // 1. المخزن اللي بيحفظ القائمة الأصلية (الـ 300 صنف)
+var originalMenuHTML = ""; 
+var gamingActive = false;
+
+// 2. أول ما الصفحة تفتح، بنصور الـ HTML بتاع المنيو ونشيله في المخزن
+window.onload = function() {
+    const select = document.getElementById('itemSelect');
+    if (select) {
+        originalMenuHTML = select.innerHTML;
+    }
+};
+
+function toggleGamingMode() {
     const select = document.getElementById('itemSelect');
     const body = document.body;
     const btn = document.getElementById('mode-switcher');
+    const title = document.querySelector('h2');
 
     gamingActive = !gamingActive;
 
     if (gamingActive) {
-        body.classList.add('gaming-active-mode');
+        // --- تحويل لوضع الجيمنج ---
+        body.style.backgroundColor = "#000"; // قلبنا الدنيا أسود
+        body.style.color = "#00ffcc";
         btn.innerText = "العودة للمصاريف العادية 🏠";
+        if(title) title.innerText = "Monito Gaming 🎮";
 
-        // تنظيف القائمة وإضافة أصناف الجيمنج
+        // بنمسح الـ 300 صنف ونحط أصناف الجيمنج بس
         select.innerHTML = `
-            <option value="">اختار اللي صرفته 🕹️</option>
+            <option value="">اختار اللي صرفته يا جيمنج 🕹️</option>
             <optgroup label="🎮 بلاي ستيشن">
                 <option value="0">بلاي ستيشن 3</option>
                 <option value="0">بلاي ستيشن 4</option>
                 <option value="0">بلاي ستيشن 5</option>
             </optgroup>
-            <optgroup label="🍜 اندومي">
-                <option value="0">اندومي لحمة/خضار</option>
-                <option value="0">اندومي كوري</option>
+            <optgroup label="🍜 منيو الاندومي">
+                <option value="0">اندومي خضار/لحمة</option>
+                <option value="0">اندومي كوري 🔥</option>
+                <option value="0">اندومي شعيرية مقلية</option>
             </optgroup>
-        `;
+            <optgroup label="🍟 سناكس">
+                <option value="0">شيبسي / كرانشي</option>
+                <option value="0">بيبسي / كولا</option>
+            </optgroup>`;
     } else {
-        body.classList.remove('gaming-active-mode');
+        // --- العودة للوضع العادي ---
+        body.style.backgroundColor = ""; 
+        body.style.color = "";
         btn.innerText = "الانتقال إلى وضع الجيمنج 🎮";
+        if(title) title.innerText = "Monito - مونيتو";
 
-        // تنظيف القائمة وإضافة أصناف البيت
-        select.innerHTML = `
-            <option value="">اختار الصنف 📝</option>
-            <option value="0">لحمة</option>
-            <option value="0">فراخ</option>
-            <option value="0">خضار</option>
-        `;
+        // السحر هنا: بنمسح الإندومي والجيمنج ونرجع الـ 300 صنف الأصليين
+        select.innerHTML = originalMenuHTML;
     }
+    
+    // تصفير خانة البحث عشان نشوف القائمة الجديدة بوضوح
+    document.getElementById('searchInput').value = '';
 }
+
+
 </script>
 </body>
 </html>
