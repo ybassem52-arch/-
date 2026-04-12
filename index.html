@@ -422,4 +422,54 @@
             options[i].style.display = txt.toUpperCase().indexOf(input) > -1 ? "" : "none";
         }
     }
+    let gamingActive = false;
+
+function toggleGamingMode() {
+    const card = document.querySelector('.card');
+    const select = document.getElementById('itemSelect');
+    const btn = document.getElementById('mode-switcher');
+    const title = document.querySelector('h2');
+
+    gamingActive = !gamingActive;
+
+    if (gamingActive) {
+        card.classList.add('gaming-theme');
+        title.innerText = "Monito Gaming 🎮";
+        title.style.color = "#00ffcc";
+        btn.innerText = "العودة للمصاريف العادية 🏠";
+        
+        // منيو الاندومي والسايبر اللي إنت صممتها
+        select.innerHTML = `
+            <option value="">اختار اللي صرفته 🕹️</option>
+            <optgroup label="🎮 قسم السايبر">
+                <option value="0">بلاي ستيشن 3</option>
+                <option value="0">بلاي ستيشن 4</option>
+                <option value="0">بلاي ستيشن 5</option>
+            </optgroup>
+            <optgroup label="🍜 قسم الاندومي">
+                <option value="0">اندومي (لحمة/خضار/فراخ)</option>
+                <option value="0">اندومي كوري (أسود/أحمر/وردي)</option>
+                <option value="0">اندومي شعيرية مقلية</option>
+            </optgroup>
+            <optgroup label="🍟 سناكس">
+                <option value="0">شيبسي / كرانشي</option>
+                <option value="0">بيبسي / كولا / عصير</option>
+            </optgroup>
+        `;
+    } else {
+        card.classList.remove('gaming-theme');
+        title.innerText = "Monito - مصاريف البيت 🏠";
+        title.style.color = ""; 
+        btn.innerText = "الانتقال إلى وضع الجيمنج 🎮";
+        
+        // رجوع المنيو الأصلية (لحمة، فراخ، خضار)
+        select.innerHTML = `
+            <option value="">اختار الصنف 📝</option>
+            <option value="0">لحمة</option>
+            <option value="0">فراخ</option>
+            <option value="0">خضار</option>
+            <option value="0">فاكهة</option>
+        `;
+    }
+}
 </script>
