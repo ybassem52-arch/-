@@ -442,23 +442,18 @@
             options[i].style.display = txt.toUpperCase().indexOf(input) > -1 ? "" : "none";
         }
     }
-    var gamingActive = false;
-
-function toggleGamingMode() {
-    const body = document.body;
+    function toggleGamingMode() {
     const select = document.getElementById('itemSelect');
+    const body = document.body;
     const btn = document.getElementById('mode-switcher');
-    const title = document.querySelector('h2') || document.querySelector('h1');
 
     gamingActive = !gamingActive;
 
     if (gamingActive) {
-        // تشغيل وضع الجيمنج على الصفحة كلها
         body.classList.add('gaming-active-mode');
-        if(title) title.innerText = "Monito Gaming 🎮";
         btn.innerText = "العودة للمصاريف العادية 🏠";
 
-        // المنيو الشبابية
+        // تنظيف القائمة وإضافة أصناف الجيمنج
         select.innerHTML = `
             <option value="">اختار اللي صرفته 🕹️</option>
             <optgroup label="🎮 بلاي ستيشن">
@@ -467,24 +462,23 @@ function toggleGamingMode() {
                 <option value="0">بلاي ستيشن 5</option>
             </optgroup>
             <optgroup label="🍜 اندومي">
-                <option value="0">اندومي (جميع الأنواع)</option>
+                <option value="0">اندومي لحمة/خضار</option>
                 <option value="0">اندومي كوري</option>
             </optgroup>
-            <optgroup label="🍟 سناكس">
-                <option value="0">شيبسي / كولا</option>
-            </optgroup>`;
+        `;
     } else {
-        // العودة للوضع العادي
         body.classList.remove('gaming-active-mode');
-        if(title) title.innerText = "Monito - مونيتو";
         btn.innerText = "الانتقال إلى وضع الجيمنج 🎮";
 
+        // تنظيف القائمة وإضافة أصناف البيت
         select.innerHTML = `
             <option value="">اختار الصنف 📝</option>
             <option value="0">لحمة</option>
             <option value="0">فراخ</option>
-            <option value="0">خضار</option>`;
+            <option value="0">خضار</option>
+        `;
     }
 }
-
 </script>
+</body>
+</html>
