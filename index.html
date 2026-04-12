@@ -9,33 +9,34 @@
         [data-theme="dark"] { --bg: #121212; --card-bg: #1e1e1e; --text-main: #ffffff; --text-sub: #cbd5e1; --box-bg: #2d2d2d; --border: #444; }
         body { font-family: sans-serif; background-color: var(--bg); color: var(--text-main); margin: 0; padding: 10px; transition: 0.3s; }
         
-        .card { max-width: 550px; margin: auto; background: var(--card-bg); padding: 20px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); border-top: 10px solid #1e3a8a; position: relative; transition: 0.5s; }
-        
-        /* شريط RGB رفيع جداً (سلك نيون) حوالين الكارت كله */
+        /* الكارت الأساسي */
+        .card { max-width: 550px; margin: auto; background: var(--card-bg); padding: 20px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); border: 1px solid transparent; position: relative; transition: 0.5s; }
+
+        /* سلك نيون رفيع جداً 1px بيلف حول الكارت */
         .rgb-border {
-            border: 1.5px solid transparent !important; /* أنحف حاجة ممكنة */
+            border: 1px solid transparent !important;
             background-image: linear-gradient(var(--card-bg), var(--card-bg)), conic-gradient(from var(--angle), #ff0000, #00ffff, #00ff00, #ffff00, #ff0000) !important;
             background-origin: border-box !important;
             background-clip: content-box, border-box !important;
             animation: rotate-rgb 3s linear infinite !important;
-            border-radius: 30px !important;
-            border-top: 1.5px solid transparent !important; /* عشان يلغي التخانة اللي فوق */
         }
 
         @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
         @keyframes rotate-rgb { to { --angle: 360deg; } }
 
-        .gaming-title { color: #00ffcc !important; text-shadow: 0 0 8px #00ffcc; }
-        
+        .gaming-title { color: #00ffcc !important; text-shadow: 0 0 8px #00ffcc; font-weight: bold; }
         h1 { text-align: center; color: var(--text-main); font-size: 22px; margin-bottom: 5px; }
         .sub-title { text-align: center; color: var(--text-sub); font-size: 14px; margin-bottom: 20px; }
         .budget-box { background: var(--box-bg); padding: 15px; border-radius: 20px; text-align: center; margin-bottom: 15px; border: 1px solid #bfdbfe; }
+        
+        /* أزرار وسويتشات */
         .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
         .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: #22c55e; }
         input:checked + .slider:before { transform: translateX(26px); }
+        
         input, select, button { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid var(--border); border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; background: var(--card-bg); color: var(--text-main); }
         .add-btn { background: #1e3a8a; color: white; border: none; font-weight: bold; cursor: pointer; }
         .history { margin-top: 15px; max-height: 250px; overflow-y: auto; border-top: 2px solid #e2e8f0; }
@@ -46,9 +47,9 @@
 <div class="card" id="mainCard">
     <h1 id="mainTitle">Monito - مونيتو</h1>
     <div class="sub-title">Smart Budgeting 🚀</div>
-    <div id="auth-section" style="text-align: center; margin-bottom: 15px;"></div>
+    <div id="auth-section" style="text-align: center; margin-bottom: 10px;"></div>
     
-    <div style="text-align: center; margin-bottom: 20px;">
+    <div style="text-align: center; margin-bottom: 15px;">
         <label class="switch"><input type="checkbox" id="dark-mode-toggle"><span class="slider"></span></label>
         <p style="font-size: 11px; margin-top: 5px;">الوضع الليلي</p>
     </div>
@@ -291,7 +292,7 @@
     <option value="عسل أسود">عسل أسود</option>
     <option value="حلاوة طحينية">حلاوة طحينية</option>
 </optgroup>
-                                       </select>
+                  </select>
         <input type="number" id="price" placeholder="المبلغ المطلوب">
         <button type="submit" class="add-btn">إضافة للمصاريف ➕</button>
     </form>
@@ -327,14 +328,13 @@
     let gamingActive = false;
     let currentUser = null;
 
-    window.addEventListener('load', function() {
+    window.addEventListener('load', () => {
         const select = document.getElementById('itemSelect');
         if (select) originalMenuHTML = select.innerHTML;
     });
 
-    const toggle = document.getElementById('dark-mode-toggle');
-    toggle.addEventListener('change', () => {
-        document.documentElement.setAttribute('data-theme', toggle.checked ? 'dark' : 'light');
+    document.getElementById('dark-mode-toggle').addEventListener('change', (e) => {
+        document.documentElement.setAttribute('data-theme', e.target.checked ? 'dark' : 'light');
     });
 
     function toggleGamingMode() {
@@ -354,18 +354,18 @@
             title.classList.add('gaming-title');
             btn.innerText = "العودة للمصاريف العادية 🏠";
             select.innerHTML = `
-                <option value="">اختار اللي صرفته يا جيمنج 🕹️</option>
+                <option value="">اختار يا جيمنج 🕹️</option>
                 <optgroup label="🎮 بلاي ستيشن">
                     <option value="بلاي ستيشن 3">بلاي ستيشن 3 (ساعة)</option>
                     <option value="بلاي ستيشن 4">بلاي ستيشن 4 (ساعة)</option>
                     <option value="بلاي ستيشن 5">بلاي ستيشن 5 (ساعة)</option>
                 </optgroup>
-                <optgroup label="🍜 منيو الاندومي">
+                <optgroup label="🍜 أكل السهر">
                     <option value="اندومي كوري 🔥">اندومي كوري 🔥</option>
-                    <option value="اندومي خضار/لحمة">اندومي خضار/لحمة</option>
+                    <option value="اندومي جامبو">اندومي جامبو</option>
                     <option value="إضافة بيض/جبنة">إضافة بيض/جبنة</option>
                 </optgroup>
-                <optgroup label="🥤 مشروبات وسناكس">
+                <optgroup label="🥤 سناكس">
                     <option value="بيبسي / كولا">بيبسي / كولا</option>
                     <option value="شيبسي / كرانشي">شيبسي / كرانشي</option>
                     <option value="ريد بول / باور">ريد بول / باور</option>
@@ -384,20 +384,13 @@
         const rem = document.getElementById('rem');
         hist.innerHTML = '';
         let total = 0;
-        list.forEach(x => {
-            total += x.a;
-            hist.innerHTML = `<div class="item"><span>${x.c}</span><b>${x.a} ج.م</b></div>` + hist.innerHTML;
-        });
+        list.forEach(x => { total += x.a; hist.innerHTML = `<div class="item"><span>${x.c}</span><b>${x.a} ج.م</b></div>` + hist.innerHTML; });
         const finalRem = myLimit - total;
         rem.innerText = finalRem + ' EGP';
         rem.style.color = finalRem < 0 ? "#dc2626" : "#15803d";
     }
 
-    function updateLimit(val) {
-        myLimit = parseFloat(val) || 0;
-        render(); saveData();
-    }
-
+    function updateLimit(val) { myLimit = parseFloat(val) || 0; render(); saveData(); }
     function saveData() { if(currentUser) db.collection("users").doc(currentUser.uid).set({ expenses: list, limit: myLimit }); }
 
     auth.onAuthStateChanged(user => {
@@ -422,8 +415,7 @@
         const c = document.getElementById('itemSelect').value;
         const a = parseFloat(document.getElementById('price').value);
         if(!c || isNaN(a)) return;
-        list.push({ c, a });
-        render(); saveData();
+        list.push({ c, a }); render(); saveData();
         document.getElementById('price').value = '';
     };
 
@@ -439,4 +431,4 @@
     }
 </script>
 </body>
-</html>
+</html>                                             
