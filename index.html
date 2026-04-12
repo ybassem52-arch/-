@@ -6,11 +6,12 @@
     <title>Monito - مونيتو</title>
     <style>
         :root { 
-            --bg: #f0f2f5; 
+            --bg: #f4f7fe; 
             --card-bg: #ffffff; 
             --text-main: #1a202c; 
             --accent: #3b82f6; 
             --secondary: #10b981;
+            --danger: #ef4444;
         }
         [data-theme="dark"] { 
             --bg: #1a202c; 
@@ -19,7 +20,7 @@
         }
         
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
             background-color: var(--bg); 
             color: var(--text-main); 
             margin: 0; padding: 20px; transition: 0.3s; 
@@ -28,68 +29,83 @@
         .card { 
             max-width: 450px; margin: auto; background: var(--card-bg); 
             padding: 30px; border-radius: 25px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
             text-align: center; border: 1px solid rgba(0,0,0,0.05);
         }
 
         h1 { 
-            font-size: 28px; color: var(--accent); margin-bottom: 5px; 
-            text-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+            font-size: 32px; color: var(--accent); margin-bottom: 2px; 
+            font-weight: 800; letter-spacing: -1px;
         }
 
-        .budget-box { 
-            background: rgba(59, 130, 246, 0.1); 
-            padding: 20px; border-radius: 20px; margin: 20px 0; 
+        .theme-btn { 
+            background: rgba(59, 130, 246, 0.1); border: 1px solid var(--accent); 
+            color: var(--accent); padding: 6px 16px; border-radius: 20px; 
+            cursor: pointer; font-size: 13px; margin: 10px auto 20px auto;
+            display: inline-block; transition: 0.2s;
+        }
+        .theme-btn:hover { background: var(--accent); color: white; }
+
+        .budget-container {
+            background: var(--bg);
+            border: 2px dashed var(--accent);
+            border-radius: 20px;
+            padding: 15px;
+            margin: 20px 0;
         }
 
-        #rem { font-size: 35px; font-weight: 800; color: var(--secondary); display: block; }
+        #rem { font-size: 38px; font-weight: 900; color: var(--secondary); display: block; margin-bottom: 10px; }
 
-        input, select { 
-            width: 100%; padding: 12px; margin: 10px 0; 
-            border: 2px solid #e2e8f0; border-radius: 15px; 
-            font-size: 16px; outline: none; transition: 0.3s;
+        .limit-input {
+            width: 80%; padding: 10px; border: 1px solid var(--accent);
+            border-radius: 12px; text-align: center; font-size: 16px;
             background: var(--card-bg); color: var(--text-main);
         }
 
-        input:focus { border-color: var(--accent); }
+        input, select { 
+            width: 100%; padding: 14px; margin: 10px 0; 
+            border: 2px solid #e2e8f0; border-radius: 15px; 
+            font-size: 16px; outline: none; background: var(--card-bg); 
+            color: var(--text-main); box-sizing: border-box;
+        }
+
+        .btn { 
+            border: none; padding: 15px; border-radius: 15px; 
+            font-weight: bold; cursor: pointer; width: 100%; 
+            font-size: 18px; transition: 0.2s;
+        }
 
         .btn-add { 
-            background: var(--accent); color: white; border: none; 
-            padding: 15px; border-radius: 15px; font-weight: bold; 
-            cursor: pointer; width: 100%; font-size: 18px; margin-top: 10px;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            background: var(--accent); color: white; 
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); margin-top: 10px;
         }
 
-        .btn-add:active { transform: scale(0.97); }
-
-        .theme-btn { 
-            background: none; border: 1px solid var(--accent); 
-            color: var(--accent); padding: 5px 15px; border-radius: 20px; 
-            cursor: pointer; font-size: 12px; margin-bottom: 15px;
+        .btn-clear {
+            background: rgba(239, 68, 68, 0.05); color: var(--danger);
+            border: 1px solid var(--danger); margin-top: 20px;
+            font-size: 14px; padding: 10px;
         }
 
-        .history { margin-top: 25px; text-align: right; max-height: 150px; overflow-y: auto; }
-        .item { 
-            display: flex; justify-content: space-between; 
-            padding: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); 
-        }
+        .history { margin-top: 25px; text-align: right; max-height: 150px; overflow-y: auto; border-top: 1px solid #eee; }
+        .item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid rgba(0,0,0,0.03); }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <button class="theme-btn" onclick="toggleTheme()">تغيير الوضع 🌓</button>
     <h1>Monito - مونيتو</h1>
-    <p style="color: #718096; font-size: 14px;">محفظتك في جيبك 🚀</p>
+    <p style="color: #718096; font-size: 14px; margin: 0;">ذكاء في المصاريف 🚀</p>
+    
+    <button class="theme-btn" onclick="toggleTheme()" id="theme-text">تغيير للوضع الليلي 🌙</button>
 
     <div id="auth-section"></div>
 
-    <div class="budget-box">
+    <div class="budget-container">
         <span id="rem">0 EGP</span>
-        <input type="number" id="limit" oninput="updateLimit(this.value)" placeholder="ميزانيتك كام؟" style="text-align: center; border: none; background: transparent;">
+        <input type="number" id="limit" class="limit-input" oninput="updateLimit(this.value)" placeholder="حدد ميزانية الشهر">
     </div>
 
-    <input type="text" id="searchInput" onkeyup="searchMenu()" placeholder="🔍 ابحث عن حاجة...">
+    <input type="text" id="searchInput" onkeyup="searchMenu()" placeholder="🔍 ابحث عن صنف...">
 
     <form id="expenseForm">
         <select id="itemSelect" size="5">
@@ -322,14 +338,14 @@
     <option value="عسل أسود">عسل أسود</option>
     <option value="حلاوة طحينية">حلاوة طحينية</option>
        </optgroup>        
-                    </select>
+                            </select>
         <input type="number" id="price" placeholder="السعر كام؟">
-        <button type="submit" class="btn-add">إضافة للمصاريف ➕</button>
+        <button type="submit" class="btn btn-add">إضافة للمصاريف ➕</button>
     </form>
 
     <div class="history" id="historyList"></div>
 
-    <button onclick="clearAll()" style="background:none; border:none; color:#ed64a6; cursor:pointer; margin-top:15px; font-size:13px;">🗑️ مسح السجل</button>
+    <button onclick="clearAll()" class="btn btn-clear">🗑️ مسح السجل بالكامل</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -352,7 +368,14 @@
 
     function toggleTheme() {
         const body = document.documentElement;
-        body.setAttribute('data-theme', body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+        const btnText = document.getElementById('theme-text');
+        if(body.getAttribute('data-theme') === 'dark') {
+            body.setAttribute('data-theme', 'light');
+            btnText.innerHTML = "تغيير للوضع الليلي 🌙";
+        } else {
+            body.setAttribute('data-theme', 'dark');
+            btnText.innerHTML = "تغيير للوضع النهاري ☀️";
+        }
     }
 
     function render() {
@@ -371,7 +394,7 @@
     auth.onAuthStateChanged(user => {
         if (user) {
             currentUser = user;
-            document.getElementById('auth-section').innerHTML = `<p>أهلاً ${user.displayName.split(' ')[0]} 👋 <span onclick="auth.signOut()" style="cursor:pointer; color:red; font-size:10px;">(خروج)</span></p>`;
+            document.getElementById('auth-section').innerHTML = `<p>أهلاً يا بطل 👋 <span onclick="auth.signOut()" style="cursor:pointer; color:red; font-size:11px;">(خروج)</span></p>`;
             db.collection("users").doc(user.uid).get().then(doc => {
                 if (doc.exists) {
                     list = doc.data().expenses || [];
@@ -381,7 +404,7 @@
                 }
             });
         } else {
-            document.getElementById('auth-section').innerHTML = `<button onclick="auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())" class="btn-add" style="background:#4285f4; margin-bottom:20px;">دخول بجوجل 🚀</button>`;
+            document.getElementById('auth-section').innerHTML = `<button onclick="auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())" class="btn btn-add" style="background:#4285f4; margin-bottom:20px;">دخول بجوجل 🚀</button>`;
         }
     });
 
@@ -394,7 +417,7 @@
         document.getElementById('price').value = '';
     };
 
-    function clearAll() { if(confirm("أكيد هتمسح كل حاجة؟")) { list = []; render(); saveData(); } }
+    function clearAll() { if(confirm("أكيد هتمسح السجل؟")) { list = []; render(); saveData(); } }
 
     function searchMenu() {
         let input = document.getElementById("searchInput").value.toUpperCase();
