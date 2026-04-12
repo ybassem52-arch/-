@@ -291,7 +291,7 @@
     <option value="عسل أسود">عسل أسود</option>
     <option value="حلاوة طحينية">حلاوة طحينية</option>
 </optgroup>
-                       </select>
+                                       </select>
         <input type="number" id="price" placeholder="المبلغ المطلوب">
         <button type="submit" class="add-btn">إضافة للمصاريف ➕</button>
     </form>
@@ -356,12 +356,19 @@
             select.innerHTML = `
                 <option value="">اختار اللي صرفته يا جيمنج 🕹️</option>
                 <optgroup label="🎮 بلاي ستيشن">
-                    <option value="بلاي ستيشن 3">بلاي ستيشن 3</option>
-                    <option value="بلاي ستيشن 4">بلاي ستيشن 4</option>
+                    <option value="بلاي ستيشن 3">بلاي ستيشن 3 (ساعة)</option>
+                    <option value="بلاي ستيشن 4">بلاي ستيشن 4 (ساعة)</option>
+                    <option value="بلاي ستيشن 5">بلاي ستيشن 5 (ساعة)</option>
                 </optgroup>
                 <optgroup label="🍜 منيو الاندومي">
                     <option value="اندومي كوري 🔥">اندومي كوري 🔥</option>
                     <option value="اندومي خضار/لحمة">اندومي خضار/لحمة</option>
+                    <option value="إضافة بيض/جبنة">إضافة بيض/جبنة</option>
+                </optgroup>
+                <optgroup label="🥤 مشروبات وسناكس">
+                    <option value="بيبسي / كولا">بيبسي / كولا</option>
+                    <option value="شيبسي / كرانشي">شيبسي / كرانشي</option>
+                    <option value="ريد بول / باور">ريد بول / باور</option>
                 </optgroup>`;
         } else {
             card.classList.remove('rgb-border');
@@ -388,19 +395,15 @@
 
     function updateLimit(val) {
         myLimit = parseFloat(val) || 0;
-        render();
-        saveData();
+        render(); saveData();
     }
 
-    function saveData() {
-        if(currentUser) db.collection("users").doc(currentUser.uid).set({ expenses: list, limit: myLimit });
-    }
+    function saveData() { if(currentUser) db.collection("users").doc(currentUser.uid).set({ expenses: list, limit: myLimit }); }
 
     auth.onAuthStateChanged(user => {
-        const section = document.getElementById('auth-section');
         if (user) {
             currentUser = user;
-            section.innerHTML = `<span>أهلاً ${user.displayName.split(' ')[0]} 👋</span> <button onclick="auth.signOut()" style="width:auto; padding:5px; font-size:10px;">خروج</button>`;
+            document.getElementById('auth-section').innerHTML = `<span>أهلاً ${user.displayName.split(' ')[0]} 👋</span> <button onclick="auth.signOut()" style="width:auto; padding:5px; font-size:10px;">خروج</button>`;
             db.collection("users").doc(user.uid).get().then(doc => {
                 if (doc.exists) {
                     list = doc.data().expenses || [];
@@ -410,7 +413,7 @@
                 }
             });
         } else {
-            section.innerHTML = `<button onclick="auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())" style="width:auto;">دخول بجوجل 🚀</button>`;
+            document.getElementById('auth-section').innerHTML = `<button onclick="auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())" style="width:auto;">دخول بجوجل 🚀</button>`;
         }
     });
 
@@ -420,18 +423,11 @@
         const a = parseFloat(document.getElementById('price').value);
         if(!c || isNaN(a)) return;
         list.push({ c, a });
-        render();
-        saveData();
+        render(); saveData();
         document.getElementById('price').value = '';
     };
 
-    function clearAll() {
-        if(confirm("مسح كل المصاريف؟")) {
-            list = [];
-            render();
-            saveData();
-        }
-    }
+    function clearAll() { if(confirm("مسح كل المصاريف؟")) { list = []; render(); saveData(); } }
 
     function searchMenu() {
         let input = document.getElementById("searchInput").value.toUpperCase();
@@ -444,4 +440,3 @@
 </script>
 </body>
 </html>
-                                             
