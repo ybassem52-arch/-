@@ -467,34 +467,48 @@
             options[i].style.display = txt.toUpperCase().indexOf(input) > -1 ? "" : "none";
         }
     }
-    // 1. المخزن اللي بيحفظ القائمة الأصلية (الـ 300 صنف)
+// 1. المتغيرات الأساسية (بره خالص)
 var originalMenuHTML = ""; 
 var gamingActive = false;
 
-// 2. أول ما الصفحة تفتح، بنصور الـ HTML بتاع المنيو ونشيله في المخزن
-window.onload = function() {
+// 2. أول ما الصفحة تفتح، بنصور الـ 300 صنف ونشيلهم في المخزن
+window.addEventListener('load', function() {
     const select = document.getElementById('itemSelect');
     if (select) {
         originalMenuHTML = select.innerHTML;
+        console.log("تم حفظ الـ 300 صنف بنجاح ✅");
     }
-};
+});
 
 function toggleGamingMode() {
     const select = document.getElementById('itemSelect');
     const body = document.body;
     const btn = document.getElementById('mode-switcher');
-    const title = document.querySelector('h2');
+    const title = document.querySelector('h2') || document.querySelector('.title'); 
+    const card = document.querySelector('.card');
+    const darkModeSwitch = document.getElementById('darkModeSwitch');
 
     gamingActive = !gamingActive;
 
     if (gamingActive) {
-        // --- تحويل لوضع الجيمنج ---
-        body.style.backgroundColor = "#000"; // قلبنا الدنيا أسود
-        body.style.color = "#00ffcc";
-        btn.innerText = "العودة للمصاريف العادية 🏠";
-        if(title) title.innerText = "Monito Gaming 🎮";
+        // --- [تفعيل وضع الجيمنج] ---
+        
+        // أ- الوضع الداكن إجباري
+        if (darkModeSwitch) {
+            darkModeSwitch.checked = true;
+            body.classList.add('dark-mode'); 
+        }
 
-        // بنمسح الـ 300 صنف ونحط أصناف الجيمنج بس
+        // ب- تشغيل الـ RGB وتغيير العنوان
+        if (card) card.classList.add('rgb-border');
+        if (title) {
+            title.innerHTML = "Monito Gaming 🎮";
+            title.classList.add('gaming-title');
+        }
+        
+        btn.innerText = "العودة للمصاريف العادية 🏠";
+
+        // ج- مسح الـ 300 صنف وحط أصناف الجيمنج
         select.innerHTML = `
             <option value="">اختار اللي صرفته يا جيمنج 🕹️</option>
             <optgroup label="🎮 بلاي ستيشن">
@@ -511,21 +525,26 @@ function toggleGamingMode() {
                 <option value="0">شيبسي / كرانشي</option>
                 <option value="0">بيبسي / كولا</option>
             </optgroup>`;
+
     } else {
-        // --- العودة للوضع العادي ---
-        body.style.backgroundColor = ""; 
-        body.style.color = "";
+        // --- [العودة للوضع العادي] ---
+        
+        // أ- إزالة الـ RGB ورجوع العنوان
+        if (card) card.classList.remove('rgb-border');
+        if (title) {
+            title.innerHTML = "Monito - مونيتو";
+            title.classList.remove('gaming-title');
+        }
+        
         btn.innerText = "الانتقال إلى وضع الجيمنج 🎮";
-        if(title) title.innerText = "Monito - مونيتو";
 
-        // السحر هنا: بنمسح الإندومي والجيمنج ونرجع الـ 300 صنف الأصليين
+        // ب- السحر هنا: رجوع الـ 300 صنف اللي خزنناهم في الأول
         select.innerHTML = originalMenuHTML;
+        
+        // ج- قفل الوضع الداكن (اختياري لو حابب)
+        // if (darkModeSwitch) darkModeSwitch.checked = false;
     }
-    
-    // تصفير خانة البحث عشان نشوف القائمة الجديدة بوضوح
-    document.getElementById('searchInput').value = '';
 }
-
 
 </script>
 </body>
