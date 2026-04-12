@@ -58,6 +58,31 @@
     color: #00ffcc !important;
     text-shadow: 0 0 5px #00ffcc;
 }
+        /* كلاس وضع الجيمنج اللي هيخلي الدنيا RGB وداكنة */
+.gaming-active-mode {
+    background-color: #050505 !important; /* خلفية سودة جداً */
+    color: #00ffcc !important;
+}
+
+/* حركة الـ RGB اللي بتلف حوالين الكارت */
+.rgb-border {
+    position: relative;
+    border: 3px solid transparent !important;
+    background-image: linear-gradient(#111, #111), conic-gradient(from var(--angle), #ff0000, #ff00ff, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000) !important;
+    background-origin: border-box !important;
+    background-clip: content-box, border-box !important;
+    animation: 4s rotate linear infinite;
+}
+
+@property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
+@keyframes rotate {
+    to { --angle: 360deg; }
+}
     </style>
 </head>
 <body>
