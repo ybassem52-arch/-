@@ -442,33 +442,24 @@
             options[i].style.display = txt.toUpperCase().indexOf(input) > -1 ? "" : "none";
         }
     }
-    // خليه "var" وبره خالص عشان نضمن إنه متشاف
-var gamingActive = false;
+    var gamingActive = false;
 
 function toggleGamingMode() {
-    const card = document.querySelector('.card');
+    const body = document.body;
     const select = document.getElementById('itemSelect');
     const btn = document.getElementById('mode-switcher');
-    const title = document.querySelector('h2');
-    const body = document.body;
+    const title = document.querySelector('h2') || document.querySelector('h1');
 
     gamingActive = !gamingActive;
 
     if (gamingActive) {
-        // --- وضع الجيمنج (إجباري أسود) ---
-        body.style.backgroundColor = "#050505"; 
-        card.style.backgroundColor = "#111";
-        card.style.color = "#fff";
-        card.style.border = "3px solid #00ffcc";
-        card.style.boxShadow = "0 0 20px #00ffcc";
-        
-        title.innerText = "Monito Gaming 🎮";
-        title.style.color = "#00ffcc";
+        // تشغيل وضع الجيمنج على الصفحة كلها
+        body.classList.add('gaming-active-mode');
+        if(title) title.innerText = "Monito Gaming 🎮";
         btn.innerText = "العودة للمصاريف العادية 🏠";
-        btn.style.background = "linear-gradient(45deg, #444, #000)";
 
-        // تغيير المنيو (طريقة الصدمة عشان تتغير غصب عنها)
-        const gamingMenu = `
+        // المنيو الشبابية
+        select.innerHTML = `
             <option value="">اختار اللي صرفته 🕹️</option>
             <optgroup label="🎮 بلاي ستيشن">
                 <option value="0">بلاي ستيشن 3</option>
@@ -476,41 +467,24 @@ function toggleGamingMode() {
                 <option value="0">بلاي ستيشن 5</option>
             </optgroup>
             <optgroup label="🍜 اندومي">
-                <option value="0">اندومي لحمة/خضار</option>
+                <option value="0">اندومي (جميع الأنواع)</option>
                 <option value="0">اندومي كوري</option>
-                <option value="0">اندومي شعيرية مقلية</option>
             </optgroup>
             <optgroup label="🍟 سناكس">
-                <option value="0">شيبسي / كرانشي</option>
-                <option value="0">بيبسي / كولا</option>
+                <option value="0">شيبسي / كولا</option>
             </optgroup>`;
-        select.innerHTML = gamingMenu;
-
     } else {
-        // --- الوضع العادي ---
-        body.style.backgroundColor = ""; 
-        card.style.backgroundColor = "";
-        card.style.color = "";
-        card.style.border = "";
-        card.style.boxShadow = "";
-        
-        title.innerText = "Monito - مصاريف البيت 🏠";
-        title.style.color = "";
+        // العودة للوضع العادي
+        body.classList.remove('gaming-active-mode');
+        if(title) title.innerText = "Monito - مونيتو";
         btn.innerText = "الانتقال إلى وضع الجيمنج 🎮";
-        btn.style.background = "";
 
-        const normalMenu = `
+        select.innerHTML = `
             <option value="">اختار الصنف 📝</option>
             <option value="0">لحمة</option>
             <option value="0">فراخ</option>
-            <option value="0">خضار</option>
-            <option value="0">فاكهة</option>`;
-        select.innerHTML = normalMenu;
+            <option value="0">خضار</option>`;
     }
-
-    // تصفير البحث عشان القائمة الجديدة تظهر كاملة
-    document.getElementById('searchInput').value = '';
-    if (typeof searchMenu === "function") searchMenu(); 
 }
 
 </script>
