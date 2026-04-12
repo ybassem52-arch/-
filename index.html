@@ -422,9 +422,7 @@
             options[i].style.display = txt.toUpperCase().indexOf(input) > -1 ? "" : "none";
         }
     }
-    let gamingActive = false;
-
-function toggleGamingMode() {
+    function toggleGamingMode() {
     const card = document.querySelector('.card');
     const select = document.getElementById('itemSelect');
     const btn = document.getElementById('mode-switcher');
@@ -435,11 +433,10 @@ function toggleGamingMode() {
     if (gamingActive) {
         card.classList.add('gaming-theme');
         title.innerText = "Monito Gaming 🎮";
-        title.style.color = "#00ffcc";
         btn.innerText = "العودة للمصاريف العادية 🏠";
         
-        // منيو الاندومي والسايبر اللي إنت صممتها
-        select.innerHTML = `
+        // مسح القائمة القديمة خالص وكتابة الجديدة
+        let gamingOptions = `
             <option value="">اختار اللي صرفته 🕹️</option>
             <optgroup label="🎮 قسم السايبر">
                 <option value="0">بلاي ستيشن 3</option>
@@ -447,29 +444,34 @@ function toggleGamingMode() {
                 <option value="0">بلاي ستيشن 5</option>
             </optgroup>
             <optgroup label="🍜 قسم الاندومي">
-                <option value="0">اندومي (لحمة/خضار/فراخ)</option>
-                <option value="0">اندومي كوري (أسود/أحمر/وردي)</option>
+                <option value="0">اندومي لحمة/خضار</option>
+                <option value="0">اندومي كوري</option>
                 <option value="0">اندومي شعيرية مقلية</option>
             </optgroup>
             <optgroup label="🍟 سناكس">
                 <option value="0">شيبسي / كرانشي</option>
-                <option value="0">بيبسي / كولا / عصير</option>
-            </optgroup>
-        `;
+                <option value="0">بيبسي / كولا</option>
+            </optgroup>`;
+        
+        select.innerHTML = gamingOptions;
     } else {
         card.classList.remove('gaming-theme');
         title.innerText = "Monito - مصاريف البيت 🏠";
-        title.style.color = ""; 
         btn.innerText = "الانتقال إلى وضع الجيمنج 🎮";
         
-        // رجوع المنيو الأصلية (لحمة، فراخ، خضار)
-        select.innerHTML = `
+        let normalOptions = `
             <option value="">اختار الصنف 📝</option>
             <option value="0">لحمة</option>
             <option value="0">فراخ</option>
             <option value="0">خضار</option>
             <option value="0">فاكهة</option>
-        `;
+            <option value="0">منظفات</option>`;
+            
+        select.innerHTML = normalOptions;
     }
+    
+    // سطر مهم جداً: عشان يصفر خانة البحث لو كنت كاتب فيها حاجة
+    document.getElementById('searchInput').value = '';
+    searchMenu(); // إعادة تشغيل البحث عشان يشوف القائمة الجديدة
 }
 </script>
