@@ -9,19 +9,22 @@
         [data-theme="dark"] { --bg: #121212; --card-bg: #1e1e1e; --text-main: #ffffff; --text-sub: #cbd5e1; --box-bg: #2d2d2d; --border: #444; }
         body { font-family: sans-serif; background-color: var(--bg); color: var(--text-main); margin: 0; padding: 10px; transition: 0.3s; }
         
-        /* الكارت الأساسي نضفناه من أي حواف */
-        .card { max-width: 550px; margin: auto; background: var(--card-bg); padding: 20px; border-radius: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: relative; transition: 0.5s; border: none !important; }
+        /* الكارت الأساسي */
+        .card { 
+            max-width: 550px; margin: auto; background: var(--card-bg); padding: 20px; 
+            border-radius: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); 
+            position: relative; transition: 0.5s; border: none; z-index: 1;
+        }
 
-        /* سلك نيون "شعرة" حقيقي باستخدام الـ outline */
-        .rgb-border {
-            outline: 2px solid transparent !important;
-            outline-offset: -2px;
-            background-image: linear-gradient(var(--card-bg), var(--card-bg)), conic-gradient(from var(--angle), #ff0000, #00ffff, #00ff00, #ffff00, #ff0000) !important;
-            background-origin: border-box !important;
-            background-clip: content-box, border-box !important;
-            animation: rotate-rgb 3s linear infinite !important;
-            border-radius: 30px !important;
-            border: 2px solid transparent !important; /* ده اللي هيشيل السور اللي ظاهر */
+        /* سلك RGB شعرة - بدون خوارزيق */
+        .rgb-border::after {
+            content: "";
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px; /* هنا بنتحكم في رفع الخط */
+            z-index: -1;
+            background: conic-gradient(from var(--angle), #ff0000, #00ffff, #00ff00, #ffff00, #ff0000);
+            border-radius: 32px;
+            animation: rotate-rgb 3s linear infinite;
         }
 
         @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
@@ -294,7 +297,7 @@
     <option value="عسل أسود">عسل أسود</option>
     <option value="حلاوة طحينية">حلاوة طحينية</option>
        </optgroup>
-                          </select>
+                                          </select>
         <input type="number" id="price" placeholder="المبلغ المطلوب">
         <button type="submit" class="add-btn">إضافة للمصاريف ➕</button>
     </form>
@@ -412,4 +415,4 @@
     }
 </script>
 </body>
-</html> 
+</html>
