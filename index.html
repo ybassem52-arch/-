@@ -9,27 +9,28 @@
         [data-theme="dark"] { --bg: #121212; --card-bg: #1e1e1e; --text-main: #ffffff; --text-sub: #cbd5e1; --box-bg: #2d2d2d; --border: #444; }
         body { font-family: sans-serif; background-color: var(--bg); color: var(--text-main); margin: 0; padding: 10px; transition: 0.3s; }
         
-        /* الكارت الأساسي */
-        .card { max-width: 550px; margin: auto; background: var(--card-bg); padding: 20px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); border: 1px solid transparent; position: relative; transition: 0.5s; }
+        /* الكارت الأساسي - شيلنا منه أي حدود تخينة */
+        .card { max-width: 550px; margin: auto; background: var(--card-bg); padding: 20px; border-radius: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border: 2px solid transparent; position: relative; transition: 0.5s; }
 
-        /* سلك نيون رفيع جداً 1px بيلف حول الكارت */
+        /* سلك RGB رفيع جداً جداً "خيط نور" */
         .rgb-border {
-            border: 1px solid transparent !important;
+            border: 2px solid transparent !important;
             background-image: linear-gradient(var(--card-bg), var(--card-bg)), conic-gradient(from var(--angle), #ff0000, #00ffff, #00ff00, #ffff00, #ff0000) !important;
             background-origin: border-box !important;
             background-clip: content-box, border-box !important;
             animation: rotate-rgb 3s linear infinite !important;
+            /* إضافة لمعة نيون خفيفة جداً */
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.2); 
         }
 
         @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
         @keyframes rotate-rgb { to { --angle: 360deg; } }
 
-        .gaming-title { color: #00ffcc !important; text-shadow: 0 0 8px #00ffcc; font-weight: bold; }
+        .gaming-title { color: #00ffcc !important; text-shadow: 0 0 8px #00ffcc; }
         h1 { text-align: center; color: var(--text-main); font-size: 22px; margin-bottom: 5px; }
         .sub-title { text-align: center; color: var(--text-sub); font-size: 14px; margin-bottom: 20px; }
         .budget-box { background: var(--box-bg); padding: 15px; border-radius: 20px; text-align: center; margin-bottom: 15px; border: 1px solid #bfdbfe; }
         
-        /* أزرار وسويتشات */
         .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
@@ -291,8 +292,8 @@
     <option value="عسل نحل">عسل نحل</option>
     <option value="عسل أسود">عسل أسود</option>
     <option value="حلاوة طحينية">حلاوة طحينية</option>
-</optgroup>
-                  </select>
+       </optgroup>
+               </select>
         <input type="number" id="price" placeholder="المبلغ المطلوب">
         <button type="submit" class="add-btn">إضافة للمصاريف ➕</button>
     </form>
@@ -322,11 +323,7 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    let list = [];
-    let myLimit = 0;
-    let originalMenuHTML = ""; 
-    let gamingActive = false;
-    let currentUser = null;
+    let list = []; let myLimit = 0; let originalMenuHTML = ""; let gamingActive = false; let currentUser = null;
 
     window.addEventListener('load', () => {
         const select = document.getElementById('itemSelect');
@@ -353,23 +350,7 @@
             title.innerHTML = "Monito Gaming 🎮";
             title.classList.add('gaming-title');
             btn.innerText = "العودة للمصاريف العادية 🏠";
-            select.innerHTML = `
-                <option value="">اختار يا جيمنج 🕹️</option>
-                <optgroup label="🎮 بلاي ستيشن">
-                    <option value="بلاي ستيشن 3">بلاي ستيشن 3 (ساعة)</option>
-                    <option value="بلاي ستيشن 4">بلاي ستيشن 4 (ساعة)</option>
-                    <option value="بلاي ستيشن 5">بلاي ستيشن 5 (ساعة)</option>
-                </optgroup>
-                <optgroup label="🍜 أكل السهر">
-                    <option value="اندومي كوري 🔥">اندومي كوري 🔥</option>
-                    <option value="اندومي جامبو">اندومي جامبو</option>
-                    <option value="إضافة بيض/جبنة">إضافة بيض/جبنة</option>
-                </optgroup>
-                <optgroup label="🥤 سناكس">
-                    <option value="بيبسي / كولا">بيبسي / كولا</option>
-                    <option value="شيبسي / كرانشي">شيبسي / كرانشي</option>
-                    <option value="ريد بول / باور">ريد بول / باور</option>
-                </optgroup>`;
+            select.innerHTML = `<option value="">اختار يا جيمنج 🕹️</option><optgroup label="🎮 بلاي ستيشن"><option value="بلاي ستيشن 3">بلاي ستيشن 3</option><option value="بلاي ستيشن 4">بلاي ستيشن 4</option></optgroup><optgroup label="🍜 أكل السهر"><option value="اندومي">اندومي</option></optgroup>`;
         } else {
             card.classList.remove('rgb-border');
             title.innerHTML = "Monito - مونيتو";
@@ -382,8 +363,7 @@
     function render() {
         const hist = document.getElementById('historyList');
         const rem = document.getElementById('rem');
-        hist.innerHTML = '';
-        let total = 0;
+        hist.innerHTML = ''; let total = 0;
         list.forEach(x => { total += x.a; hist.innerHTML = `<div class="item"><span>${x.c}</span><b>${x.a} ج.م</b></div>` + hist.innerHTML; });
         const finalRem = myLimit - total;
         rem.innerText = finalRem + ' EGP';
@@ -431,4 +411,4 @@
     }
 </script>
 </body>
-</html>                                             
+</html>
