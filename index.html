@@ -338,7 +338,7 @@
     <option value="عسل أسود">عسل أسود</option>
     <option value="حلاوة طحينية">حلاوة طحينية</option>
        </optgroup>        
-                            </select>
+                                    </select>
         <input type="number" id="price" placeholder="السعر كام؟">
         <button type="submit" class="btn btn-add">إضافة للمصاريف ➕</button>
     </form>
@@ -394,7 +394,10 @@
     auth.onAuthStateChanged(user => {
         if (user) {
             currentUser = user;
-            document.getElementById('auth-section').innerHTML = `<p>أهلاً يا بطل 👋 <span onclick="auth.signOut()" style="cursor:pointer; color:red; font-size:11px;">(خروج)</span></p>`;
+            // هنا التعديل: بيقرأ الاسم الأول من الإيميل
+            const firstName = user.displayName ? user.displayName.split(' ')[0] : "مستخدم";
+            document.getElementById('auth-section').innerHTML = `<p style="margin:10px 0;">أهلاً ${firstName} 👋 <span onclick="auth.signOut()" style="cursor:pointer; color:red; font-size:11px; margin-right:10px;">(خروج)</span></p>`;
+            
             db.collection("users").doc(user.uid).get().then(doc => {
                 if (doc.exists) {
                     list = doc.data().expenses || [];
