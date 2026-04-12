@@ -9,23 +9,24 @@
         [data-theme="dark"] { --bg: #121212; --card-bg: #1e1e1e; --text-main: #ffffff; --text-sub: #cbd5e1; --box-bg: #2d2d2d; --border: #444; }
         body { font-family: sans-serif; background-color: var(--bg); color: var(--text-main); margin: 0; padding: 10px; transition: 0.3s; }
         
-        .card { max-width: 550px; margin: auto; background: var(--card-bg); padding: 20px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); border-top: 12px solid #1e3a8a; position: relative; transition: 0.5s; }
+        .card { max-width: 550px; margin: auto; background: var(--card-bg); padding: 20px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); border-top: 12px solid #1e3a8a; position: relative; transition: 0.5s; overflow: hidden; }
         
-        /* تأثير الـ RGB المضيء */
+        /* شريط الـ RGB الرفيع والشيك */
         .rgb-border {
-            border: 5px solid transparent !important;
+            border: 2px solid transparent !important;
             background-image: linear-gradient(var(--card-bg), var(--card-bg)), conic-gradient(from var(--angle), #ff0000, #00ffff, #00ff00, #ffff00, #ff0000) !important;
             background-origin: border-box !important;
             background-clip: content-box, border-box !important;
             animation: rotate-rgb 3s linear infinite !important;
+            border-radius: 30px !important;
         }
 
         @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
         @keyframes rotate-rgb { to { --angle: 360deg; } }
 
-        .gaming-title { color: #00ffcc !important; text-shadow: 0 0 10px #00ffcc; font-family: sans-serif; }
+        .gaming-title { color: #00ffcc !important; text-shadow: 0 0 10px #00ffcc; }
         
-        h1 { text-align: center; color: var(--text-main); font-size: 22px; margin-bottom: 5px; transition: 0.3s; }
+        h1 { text-align: center; color: var(--text-main); font-size: 22px; margin-bottom: 5px; }
         .sub-title { text-align: center; color: var(--text-sub); font-size: 14px; margin-bottom: 20px; }
         .budget-box { background: var(--box-bg); padding: 15px; border-radius: 20px; text-align: center; margin-bottom: 15px; border: 1px solid #bfdbfe; }
         .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
@@ -289,7 +290,7 @@
     <option value="عسل أسود">عسل أسود</option>
     <option value="حلاوة طحينية">حلاوة طحينية</option>
 </optgroup>
-                            </select>
+                                                </select>
         <input type="number" id="price" placeholder="المبلغ المطلوب">
         <button type="submit" class="add-btn">إضافة للمصاريف ➕</button>
     </form>
@@ -323,19 +324,16 @@
     let gamingActive = false;
     let currentUser = null;
 
-    // حفظ الأصناف الأصلية فور التحميل
     window.addEventListener('load', function() {
         const select = document.getElementById('itemSelect');
         if (select) originalMenuHTML = select.innerHTML;
     });
 
-    // سويتش الوضع الليلي
     const toggle = document.getElementById('dark-mode-toggle');
     toggle.addEventListener('change', () => {
         document.documentElement.setAttribute('data-theme', toggle.checked ? 'dark' : 'light');
     });
 
-    // دالة وضع الجيمنج (التحويل الكامل)
     function toggleGamingMode() {
         const select = document.getElementById('itemSelect');
         const body = document.body;
@@ -378,7 +376,6 @@
         }
     }
 
-    // دوال التشغيل الأساسية
     function render() {
         const hist = document.getElementById('historyList');
         const rem = document.getElementById('rem');
