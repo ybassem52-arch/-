@@ -9,18 +9,19 @@
         [data-theme="dark"] { --bg: #121212; --card-bg: #1e1e1e; --text-main: #ffffff; --text-sub: #cbd5e1; --box-bg: #2d2d2d; --border: #444; }
         body { font-family: sans-serif; background-color: var(--bg); color: var(--text-main); margin: 0; padding: 10px; transition: 0.3s; }
         
-        /* الكارت الأساسي - شيلنا منه أي حدود تخينة */
-        .card { max-width: 550px; margin: auto; background: var(--card-bg); padding: 20px; border-radius: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border: 2px solid transparent; position: relative; transition: 0.5s; }
+        /* الكارت الأساسي نضفناه من أي حواف */
+        .card { max-width: 550px; margin: auto; background: var(--card-bg); padding: 20px; border-radius: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: relative; transition: 0.5s; border: none !important; }
 
-        /* سلك RGB رفيع جداً جداً "خيط نور" */
+        /* سلك نيون "شعرة" حقيقي باستخدام الـ outline */
         .rgb-border {
-            border: 2px solid transparent !important;
+            outline: 2px solid transparent !important;
+            outline-offset: -2px;
             background-image: linear-gradient(var(--card-bg), var(--card-bg)), conic-gradient(from var(--angle), #ff0000, #00ffff, #00ff00, #ffff00, #ff0000) !important;
             background-origin: border-box !important;
             background-clip: content-box, border-box !important;
             animation: rotate-rgb 3s linear infinite !important;
-            /* إضافة لمعة نيون خفيفة جداً */
-            box-shadow: 0 0 10px rgba(0, 255, 204, 0.2); 
+            border-radius: 30px !important;
+            border: 2px solid transparent !important; /* ده اللي هيشيل السور اللي ظاهر */
         }
 
         @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
@@ -293,7 +294,7 @@
     <option value="عسل أسود">عسل أسود</option>
     <option value="حلاوة طحينية">حلاوة طحينية</option>
        </optgroup>
-               </select>
+                          </select>
         <input type="number" id="price" placeholder="المبلغ المطلوب">
         <button type="submit" class="add-btn">إضافة للمصاريف ➕</button>
     </form>
@@ -350,7 +351,7 @@
             title.innerHTML = "Monito Gaming 🎮";
             title.classList.add('gaming-title');
             btn.innerText = "العودة للمصاريف العادية 🏠";
-            select.innerHTML = `<option value="">اختار يا جيمنج 🕹️</option><optgroup label="🎮 بلاي ستيشن"><option value="بلاي ستيشن 3">بلاي ستيشن 3</option><option value="بلاي ستيشن 4">بلاي ستيشن 4</option></optgroup><optgroup label="🍜 أكل السهر"><option value="اندومي">اندومي</option></optgroup>`;
+            select.innerHTML = `<option value="">اختار يا جيمنج 🕹️</option><optgroup label="🎮 بلاي ستيشن"><option value="بلاي ستيشن 3">بلاي ستيشن 3</option><option value="بلاي ستيشن 4">بلاي ستيشن 4</option></optgroup>`;
         } else {
             card.classList.remove('rgb-border');
             title.innerHTML = "Monito - مونيتو";
@@ -411,4 +412,4 @@
     }
 </script>
 </body>
-</html>
+</html> 
