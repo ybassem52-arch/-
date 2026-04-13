@@ -6,35 +6,107 @@
     <title>Monito - مونيتو</title>
     <style>
         :root { 
-            --bg: #f4f7fe; --card-bg: #ffffff; --text-main: #1a202c; 
-            --accent: #3b82f6; --secondary: #10b981; --danger: #ef4444;
+            --bg: #f4f7fe; 
+            --card-bg: #ffffff; 
+            --text-main: #1a202c; 
+            --accent: #3b82f6; 
+            --secondary: #10b981;
+            --danger: #ef4444;
         }
-        [data-theme="dark"] { --bg: #1a202c; --card-bg: #2d3748; --text-main: #f7fafc; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text-main); margin: 0; padding: 20px; transition: 0.3s; }
-        .card { max-width: 450px; margin: auto; background: var(--card-bg); padding: 30px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; }
-        h1 { font-size: 32px; color: var(--accent); margin-bottom: 2px; font-weight: 800; }
-        .theme-btn { background: rgba(59, 130, 246, 0.1); border: 1px solid var(--accent); color: var(--accent); padding: 6px 16px; border-radius: 20px; cursor: pointer; margin-bottom: 15px; }
-        .budget-container { background: var(--bg); border: 2px dashed var(--accent); border-radius: 20px; padding: 15px; margin: 20px 0; }
-        #rem { font-size: 38px; font-weight: 900; color: var(--secondary); display: block; }
-        input, select { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 15px; background: var(--card-bg); color: var(--text-main); font-size: 16px; }
-        .btn { border: none; padding: 15px; border-radius: 15px; font-weight: bold; cursor: pointer; width: 100%; font-size: 18px; }
-        .btn-add { background: var(--accent); color: white; margin-top: 10px; }
-        .auth-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-        .btn-auth { font-size: 14px; padding: 12px; border-radius: 12px; border: none; color: white; font-weight: bold; cursor: pointer; }
-        .history { margin-top: 25px; text-align: right; max-height: 200px; overflow-y: auto; border-top: 1px solid #eee; }
+        [data-theme="dark"] { 
+            --bg: #1a202c; 
+            --card-bg: #2d3748; 
+            --text-main: #f7fafc; 
+        }
+        
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            margin: 0; padding: 20px; transition: 0.3s; 
+        }
+
+        .card { 
+            max-width: 450px; margin: auto; background: var(--card-bg); 
+            padding: 30px; border-radius: 25px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            text-align: center; border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        h1 { 
+            font-size: 32px; color: var(--accent); margin-bottom: 2px; 
+            font-weight: 800; letter-spacing: -1px;
+        }
+
+        .theme-btn { 
+            background: rgba(59, 130, 246, 0.1); border: 1px solid var(--accent); 
+            color: var(--accent); padding: 6px 16px; border-radius: 20px; 
+            cursor: pointer; font-size: 13px; margin: 10px auto 20px auto;
+            display: inline-block; transition: 0.2s;
+        }
+        .theme-btn:hover { background: var(--accent); color: white; }
+
+        .budget-container {
+            background: var(--bg);
+            border: 2px dashed var(--accent);
+            border-radius: 20px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        #rem { font-size: 38px; font-weight: 900; color: var(--secondary); display: block; margin-bottom: 10px; }
+
+        .limit-input {
+            width: 80%; padding: 10px; border: 1px solid var(--accent);
+            border-radius: 12px; text-align: center; font-size: 16px;
+            background: var(--card-bg); color: var(--text-main);
+        }
+
+        input, select { 
+            width: 100%; padding: 14px; margin: 10px 0; 
+            border: 2px solid #e2e8f0; border-radius: 15px; 
+            font-size: 16px; outline: none; background: var(--card-bg); 
+            color: var(--text-main); box-sizing: border-box;
+        }
+
+        .btn { 
+            border: none; padding: 15px; border-radius: 15px; 
+            font-weight: bold; cursor: pointer; width: 100%; 
+            font-size: 18px; transition: 0.2s;
+        }
+
+        .btn-add { 
+            background: var(--accent); color: white; 
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); margin-top: 10px;
+        }
+
+        .btn-clear {
+            background: rgba(239, 68, 68, 0.05); color: var(--danger);
+            border: 1px solid var(--danger); margin-top: 20px;
+            font-size: 14px; padding: 10px;
+        }
+
+        .history { margin-top: 25px; text-align: right; max-height: 150px; overflow-y: auto; border-top: 1px solid #eee; }
         .item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid rgba(0,0,0,0.03); }
     </style>
 </head>
 <body>
+
 <div class="card">
     <h1>Monito - مونيتو</h1>
+    <p style="color: #718096; font-size: 14px; margin: 0;">Smart Budgeting 🚀</p>
+
     <button class="theme-btn" onclick="toggleTheme()" id="theme-text">تغيير للوضع الليلي 🌙</button>
+
     <div id="auth-section"></div>
+
     <div class="budget-container">
         <span id="rem">0 EGP</span>
-        <input type="number" id="limit" oninput="updateLimit(this.value)" placeholder="حدد ميزانية الشهر">
+        <input type="number" id="limit" class="limit-input" oninput="updateLimit(this.value)" placeholder="حدد ميزانية الشهر">
     </div>
+
     <input type="text" id="searchInput" onkeyup="searchMenu()" placeholder="🔍 ابحث عن صنف...">
+
     <form id="expenseForm">
         <select id="itemSelect" size="5">
             <optgroup label="🥩 جزارة وطيور (منفصلة)">
@@ -266,12 +338,13 @@
     <option value="عسل أسود">عسل أسود</option>
     <option value="حلاوة طحينية">حلاوة طحينية</option>
        </optgroup>        
-                                                    </select>
+                                    </select>
         <input type="number" id="price" placeholder="السعر كام؟">
         <button type="submit" class="btn btn-add">إضافة للمصاريف ➕</button>
     </form>
 
     <div class="history" id="historyList"></div>
+
     <button onclick="clearAll()" class="btn btn-clear">🗑️ مسح السجل بالكامل</button>
 </div>
 
@@ -293,63 +366,59 @@
 
     let list = []; let myLimit = 0; let currentUser = null;
 
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            currentUser = user;
-            const name = user.displayName ? user.displayName.split(' ')[0] : "يوسف";
-            document.getElementById('auth-section').innerHTML = `أهلاً ${name} 👋 <span onclick="auth.signOut()" style="color:red; cursor:pointer; font-size:12px;">(خروج)</span>`;
-            db.collection("users").doc(user.uid).get().then(doc => {
-                if (doc.exists) { 
-                    list = doc.data().expenses || []; 
-                    myLimit = doc.data().limit || 0; 
-                    document.getElementById('limit').value = myLimit; 
-                    render(); 
-                }
-            });
+    function toggleTheme() {
+        const body = document.documentElement;
+        const btnText = document.getElementById('theme-text');
+        if(body.getAttribute('data-theme') === 'dark') {
+            body.setAttribute('data-theme', 'light');
+            btnText.innerHTML = "تغيير للوضع الليلي 🌙";
         } else {
-            document.getElementById('auth-section').innerHTML = `
-                <div class="auth-options">
-                    <button onclick="auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())" class="btn-auth" style="background:#4285f4">دخول بجوجل 🚀</button>
-                    <button onclick="loginPhone()" class="btn-auth" style="background:#34b7f1">رقم الهاتف 📱</button>
-                </div><div id="recaptcha-container"></div>`;
+            body.setAttribute('data-theme', 'dark');
+            btnText.innerHTML = "تغيير للوضع النهاري ☀️";
         }
-    });
-
-    function loginPhone() {
-        let num = prompt("رقمك بـ +20:");
-        if(!num) return;
-        const verifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {size: 'invisible'});
-        auth.signInWithPhoneNumber(num, verifier).then(res => {
-            let code = prompt("كود الـ SMS:");
-            return res.confirm(code);
-        }).catch(err => alert("خطأ: " + err.message));
     }
 
     function render() {
         const hist = document.getElementById('historyList');
+        const rem = document.getElementById('rem');
         hist.innerHTML = ''; let total = 0;
         list.forEach(x => { total += x.a; hist.innerHTML = `<div class="item"><span>${x.c}</span><b>${x.a} ج.م</b></div>` + hist.innerHTML; });
-        const rem = myLimit - total;
-        document.getElementById('rem').innerText = rem + ' EGP';
-        document.getElementById('rem').style.color = rem < 0 ? "#ef4444" : "#10b981";
+        const finalRem = myLimit - total;
+        rem.innerText = finalRem + ' EGP';
+        rem.style.color = finalRem < 0 ? "#e53e3e" : "#38a169";
     }
+
+    function updateLimit(val) { myLimit = parseFloat(val) || 0; render(); saveData(); }
+    function saveData() { if(currentUser) db.collection("users").doc(currentUser.uid).set({ expenses: list, limit: myLimit }); }
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            currentUser = user;
+            // هنا التعديل: بيقرأ الاسم الأول من الإيميل
+            const firstName = user.displayName ? user.displayName.split(' ')[0] : "مستخدم";
+            document.getElementById('auth-section').innerHTML = `<p style="margin:10px 0;">أهلاً ${firstName} 👋 <span onclick="auth.signOut()" style="cursor:pointer; color:red; font-size:11px; margin-right:10px;">(خروج)</span></p>`;
+            
+            db.collection("users").doc(user.uid).get().then(doc => {
+                if (doc.exists) {
+                    list = doc.data().expenses || [];
+                    myLimit = doc.data().limit || 0;
+                    document.getElementById('limit').value = myLimit;
+                    render();
+                }
+            });
+        } else {
+            document.getElementById('auth-section').innerHTML = `<button onclick="auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())" class="btn btn-add" style="background:#4285f4; margin-bottom:20px;">دخول بجوجل 🚀</button>`;
+        }
+    });
 
     document.getElementById('expenseForm').onsubmit = (e) => {
         e.preventDefault();
         const c = document.getElementById('itemSelect').value;
         const a = parseFloat(document.getElementById('price').value);
-        if(c && a) { list.push({c, a}); render(); saveData(); document.getElementById('price').value = ''; }
+        if(!c || isNaN(a)) return;
+        list.push({ c, a }); render(); saveData();
+        document.getElementById('price').value = '';
     };
-
-    function updateLimit(v) { myLimit = parseFloat(v) || 0; render(); saveData(); }
-    function saveData() { if(currentUser) db.collection("users").doc(currentUser.uid).set({expenses: list, limit: myLimit}); }
-    
-    function toggleTheme() { 
-        const html = document.documentElement;
-        const isDark = html.getAttribute('data-theme') === 'dark';
-        html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-        document.getElementById('theme-text').innerText = isDark ? "تغيير للوضع الليلي 🌙" : "تغيير للوضع النهاري ☀️";
-    }
 
     function clearAll() { if(confirm("أكيد هتمسح السجل؟")) { list = []; render(); saveData(); } }
 
@@ -357,7 +426,8 @@
         let input = document.getElementById("searchInput").value.toUpperCase();
         let options = document.getElementById("itemSelect").options;
         for (let i = 0; i < options.length; i++) {
-            options[i].style.display = options[i].text.toUpperCase().indexOf(input) > -1 ? "" : "none";
+            let txt = options[i].text;
+            options[i].style.display = txt.toUpperCase().indexOf(input) > -1 ? "" : "none";
         }
     }
 </script>
