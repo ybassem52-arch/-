@@ -352,6 +352,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
 <script>
+    // إعدادات Firebase اللي إنت عاملها
     const firebaseConfig = {
         apiKey: "AIzaSyCpwcIgEsaG_lEhC6Yp6nQ__spGj_ZqnYY",
         authDomain: "monito-c4291.firebaseapp.com",
@@ -363,8 +364,11 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    let list = []; let myLimit = 0; let currentUser = null;
+    let list = []; 
+    let myLimit = 0; 
+    let currentUser = null;
 
+    // دالة تغيير الوضع (ليلي/نهاري)
     function toggleTheme() {
         const body = document.documentElement;
         const btnText = document.getElementById('theme-text');
@@ -377,26 +381,55 @@
         }
     }
 
+    // الدالة المسؤولة عن عرض البيانات (تم التعديل هنا)
     function render() {
         const hist = document.getElementById('historyList');
         const rem = document.getElementById('rem');
-        hist.innerHTML = ''; let total = 0;
-        list.forEach(x => { total += x.a; hist.innerHTML = `<div class="item"><span>${x.c}</span><b>${x.a} ج.م</b></div>` + hist.innerHTML; });
+        
+        hist.innerHTML = ''; // بننظف القائمة قبل العرض
+        let itemsHTML = ''; // متغير نجمع فيه كل العناصر
+        let total = 0;
+
+        list.forEach(x => { 
+            total += x.a; 
+            // بنضيف كل عنصر جديد في سطر لوحده
+            itemsHTML = `<div class="item"><span>${x.c}</span><b>${x.a} ج.م</b></div>` + itemsHTML; 
+        });
+
+        hist.innerHTML = itemsHTML; // بنعرض السجل بالكامل
+        
         const finalRem = myLimit - total;
         rem.innerText = finalRem + ' EGP';
+        
+        // تغيير اللون للأحمر لو المصاريف عدت الميزانية
         rem.style.color = finalRem < 0 ? "#e53e3e" : "#38a169";
     }
 
-    function updateLimit(val) { myLimit = parseFloat(val) || 0; render(); saveData(); }
-    function saveData() { if(currentUser) db.collection("users").doc(currentUser.uid).set({ expenses: list, limit: myLimit }); }
+    // تحديث الميزانية الشهرية
+    function updateLimit(val) { 
+        myLimit = parseFloat(val) || 0; 
+        render(); 
+        saveData(); 
+    }
 
+    // حفظ البيانات في Firebase
+    function saveData() { 
+        if(currentUser) {
+            db.collection("users").doc(currentUser.uid).set({ 
+                expenses: list, 
+                limit: myLimit 
+            }).catch(error => console.error("Error saving: ", error));
+        }
+    }
+
+    // مراقبة حالة تسجيل الدخول
     auth.onAuthStateChanged(user => {
         if (user) {
             currentUser = user;
-            // هنا التعديل: بيقرأ الاسم الأول من الإيميل
-            const firstName = user.displayName ? user.displayName.split(' ')[0] : "مستخدم";
+            const firstName = user.displayName ? user.displayName.split(' ')[0] : "يوسف";
             document.getElementById('auth-section').innerHTML = `<p style="margin:10px 0;">أهلاً ${firstName} 👋 <span onclick="auth.signOut()" style="cursor:pointer; color:red; font-size:11px; margin-right:10px;">(خروج)</span></p>`;
             
+            // جلب البيانات من Firestore عند الدخول
             db.collection("users").doc(user.uid).get().then(doc => {
                 if (doc.exists) {
                     list = doc.data().expenses || [];
@@ -410,17 +443,33 @@
         }
     });
 
+    // عند إضافة مصروف جديد
     document.getElementById('expenseForm').onsubmit = (e) => {
         e.preventDefault();
         const c = document.getElementById('itemSelect').value;
         const a = parseFloat(document.getElementById('price').value);
-        if(!c || isNaN(a)) return;
-        list.push({ c, a }); render(); saveData();
-        document.getElementById('price').value = '';
+        
+        if(!c || isNaN(a)) {
+            alert("يا بطل اختار صنف واكتب السعر!");
+            return;
+        }
+
+        list.push({ c, a }); 
+        render(); 
+        saveData(); 
+        document.getElementById('price').value = ''; // تصفير خانة السعر بعد الإضافة
     };
 
-    function clearAll() { if(confirm("أكيد هتمسح السجل؟")) { list = []; render(); saveData(); } }
+    // مسح السجل بالكامل
+    function clearAll() { 
+        if(confirm("أكيد هتمسح السجل؟ الميزانية هتصفر!")) { 
+            list = []; 
+            render(); 
+            saveData(); 
+        } 
+    }
 
+    // البحث في القائمة
     function searchMenu() {
         let input = document.getElementById("searchInput").value.toUpperCase();
         let options = document.getElementById("itemSelect").options;
