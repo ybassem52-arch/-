@@ -352,132 +352,154 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
 <script>
-    // إعدادات Firebase اللي إنت عاملها
-    const firebaseConfig = {
-        apiKey: "AIzaSyCpwcIgEsaG_lEhC6Yp6nQ__spGj_ZqnYY",
-        authDomain: "monito-c4291.firebaseapp.com",
-        projectId: "monito-c4291",
-        storageBucket: "monito-c4291.appspot.com",
-        appId: "1:366796127553:web:a840f751c322000248b5c0"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+            // إعدادات Firebase اللي إنت عاملها
+const firebaseConfig = {
+    apiKey: "AIzaSyCpwcIgEsaG_lEhC6Yp6nQ__spGj_ZqnYY",
+    authDomain: "monito-c4291.firebaseapp.com",
+    projectId: "monito-c4291",
+    storageBucket: "monito-c4291.appspot.com",
+    appId: "1:366796127553:web:a840f751c322000248b5c0"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-    let list = []; 
-    let myLimit = 0; 
-    let currentUser = null;
+let list = []; 
+let myLimit = 0; 
+let currentUser = null;
 
-    // دالة تغيير الوضع (ليلي/نهاري)
-    function toggleTheme() {
-        const body = document.documentElement;
-        const btnText = document.getElementById('theme-text');
-        if(body.getAttribute('data-theme') === 'dark') {
-            body.setAttribute('data-theme', 'light');
-            btnText.innerHTML = "تغيير للوضع الليلي 🌙";
-        } else {
-            body.setAttribute('data-theme', 'dark');
-            btnText.innerHTML = "تغيير للوضع النهاري ☀️";
-        }
+// دالة تغيير الوضع (ليلي/نهاري)
+function toggleTheme() {
+    const body = document.documentElement;
+    const btnText = document.getElementById('theme-text');
+    if(body.getAttribute('data-theme') === 'dark') {
+        body.setAttribute('data-theme', 'light');
+        btnText.innerHTML = "تغيير للوضع الليلي 🌙";
+    } else {
+        body.setAttribute('data-theme', 'dark');
+        btnText.innerHTML = "تغيير للوضع النهاري ☀️";
     }
+}
 
-    // الدالة المسؤولة عن عرض البيانات (تم التعديل هنا)
-    function render() {
-        const hist = document.getElementById('historyList');
-        const rem = document.getElementById('rem');
+// الدالة المسؤولة عن عرض البيانات (تمت إضافة سلة المهملات هنا)
+function render() {
+    const hist = document.getElementById('historyList');
+    const rem = document.getElementById('rem');
+    
+    hist.innerHTML = ''; // بننظف القائمة قبل العرض
+    let total = 0;
+
+    // بنلف على العناصر بالـ index عشان نعرف نمسح كل صنف لوحده
+    list.forEach((x, index) => { 
+        total += x.a; 
         
-        hist.innerHTML = ''; // بننظف القائمة قبل العرض
-        let itemsHTML = ''; // متغير نجمع فيه كل العناصر
-        let total = 0;
-
-        list.forEach(x => { 
-            total += x.a; 
-            // بنضيف كل عنصر جديد في سطر لوحده
-            itemsHTML = `<div class="item"><span>${x.c}</span><b>${x.a} ج.م</b></div>` + itemsHTML; 
-        });
-
-        hist.innerHTML = itemsHTML; // بنعرض السجل بالكامل
+        // إنشاء عنصر الـ div لكل صنف في السجل
+        const itemDiv = document.createElement('div');
+        itemDiv.className = "item";
+        itemDiv.style.display = "flex";
+        itemDiv.style.justifyContent = "space-between";
+        itemDiv.style.alignItems = "center";
+        itemDiv.style.padding = "5px 0";
         
-        const finalRem = myLimit - total;
-        rem.innerText = finalRem + ' EGP';
+        // وضع النص وزرار سلة المهملات الصغير
+        itemDiv.innerHTML = `
+            <span>${x.c} : <b>${x.a} ج.م</b></span>
+            <button onclick="deleteItem(${index})" style="background:none; border:none; cursor:pointer; font-size:16px;">🗑️</button>
+        `;
         
-        // تغيير اللون للأحمر لو المصاريف عدت الميزانية
-        rem.style.color = finalRem < 0 ? "#e53e3e" : "#38a169";
-    }
-
-    // تحديث الميزانية الشهرية
-    function updateLimit(val) { 
-        myLimit = parseFloat(val) || 0; 
-        render(); 
-        saveData(); 
-    }
-
-    // حفظ البيانات في Firebase
-    function saveData() { 
-        if(currentUser) {
-            db.collection("users").doc(currentUser.uid).set({ 
-                expenses: list, 
-                limit: myLimit 
-            }).catch(error => console.error("Error saving: ", error));
-        }
-    }
-
-    // مراقبة حالة تسجيل الدخول
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            currentUser = user;
-            const firstName = user.displayName ? user.displayName.split(' ')[0] : "يوسف";
-            document.getElementById('auth-section').innerHTML = `<p style="margin:10px 0;">أهلاً ${firstName} 👋 <span onclick="auth.signOut()" style="cursor:pointer; color:red; font-size:11px; margin-right:10px;">(خروج)</span></p>`;
-            
-            // جلب البيانات من Firestore عند الدخول
-            db.collection("users").doc(user.uid).get().then(doc => {
-                if (doc.exists) {
-                    list = doc.data().expenses || [];
-                    myLimit = doc.data().limit || 0;
-                    document.getElementById('limit').value = myLimit;
-                    render();
-                }
-            });
-        } else {
-            document.getElementById('auth-section').innerHTML = `<button onclick="auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())" class="btn btn-add" style="background:#4285f4; margin-bottom:20px;">دخول بجوجل 🚀</button>`;
-        }
+        hist.prepend(itemDiv); // عشان الصنف الجديد يظهر فوق دايماً
     });
+    
+    const finalRem = myLimit - total;
+    rem.innerText = finalRem + ' EGP';
+    
+    // تغيير اللون للأحمر لو المصاريف عدت الميزانية
+    rem.style.color = finalRem < 0 ? "#e53e3e" : "#38a169";
+}
 
-    // عند إضافة مصروف جديد
-    document.getElementById('expenseForm').onsubmit = (e) => {
-        e.preventDefault();
-        const c = document.getElementById('itemSelect').value;
-        const a = parseFloat(document.getElementById('price').value);
+// دالة حذف صنف واحد فقط عند الضغط على سلة المهملات
+function deleteItem(index) {
+    if(confirm("تمسح الصنف ده؟")) {
+        list.splice(index, 1); // بتمسح العنصر من المصفوفة بناءً على ترتيبه
+        render(); // إعادة عرض القائمة بعد الحذف
+        saveData(); // حفظ التعديل فوراً في Firebase
+    }
+}
+
+// تحديث الميزانية الشهرية
+function updateLimit(val) { 
+    myLimit = parseFloat(val) || 0; 
+    render(); 
+    saveData(); 
+}
+
+// حفظ البيانات في Firebase
+function saveData() { 
+    if(currentUser) {
+        db.collection("users").doc(currentUser.uid).set({ 
+            expenses: list, 
+            limit: myLimit 
+        }).catch(error => console.error("Error saving: ", error));
+    }
+}
+
+// مراقبة حالة تسجيل الدخول
+auth.onAuthStateChanged(user => {
+    if (user) {
+        currentUser = user;
+        const firstName = user.displayName ? user.displayName.split(' ')[0] : "يوسف";
+        document.getElementById('auth-section').innerHTML = `<p style="margin:10px 0;">أهلاً ${firstName} 👋 <span onclick="auth.signOut()" style="cursor:pointer; color:red; font-size:11px; margin-right:10px;">(خروج)</span></p>`;
         
-        if(!c || isNaN(a)) {
-            alert("يا بطل اختار صنف واكتب السعر!");
-            return;
-        }
+        // جلب البيانات من Firestore عند الدخول
+        db.collection("users").doc(user.uid).get().then(doc => {
+            if (doc.exists) {
+                list = doc.data().expenses || [];
+                myLimit = doc.data().limit || 0;
+                document.getElementById('limit').value = myLimit;
+                render();
+            }
+        });
+    } else {
+        document.getElementById('auth-section').innerHTML = `<button onclick="auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())" class="btn btn-add" style="background:#4285f4; margin-bottom:20px;">دخول بجوجل 🚀</button>`;
+    }
+});
 
-        list.push({ c, a }); 
+// عند إضافة مصروف جديد
+document.getElementById('expenseForm').onsubmit = (e) => {
+    e.preventDefault();
+    const c = document.getElementById('itemSelect').value;
+    const a = parseFloat(document.getElementById('price').value);
+    
+    if(!c || isNaN(a)) {
+        alert("يا بطل اختار صنف واكتب السعر!");
+        return;
+    }
+
+    list.push({ c, a }); 
+    render(); 
+    saveData(); 
+    document.getElementById('price').value = ''; // تصفير خانة السعر بعد الإضافة
+};
+
+// مسح السجل بالكامل (للاستخدام بعد أسبوع أو أول الشهر)
+function clearAll() { 
+    if(confirm("أكيد هتمسح السجل بالكامل؟")) { 
+        list = []; 
         render(); 
         saveData(); 
-        document.getElementById('price').value = ''; // تصفير خانة السعر بعد الإضافة
-    };
+    } 
+}
 
-    // مسح السجل بالكامل
-    function clearAll() { 
-        if(confirm("أكيد هتمسح السجل؟ الميزانية هتصفر!")) { 
-            list = []; 
-            render(); 
-            saveData(); 
-        } 
+// البحث في القائمة
+function searchMenu() {
+    let input = document.getElementById("searchInput").value.toUpperCase();
+    let options = document.getElementById("itemSelect").options;
+    for (let i = 0; i < options.length; i++) {
+        let txt = options[i].text;
+        options[i].style.display = txt.toUpperCase().indexOf(input) > -1 ? "" : "none";
     }
+}
 
-    // البحث في القائمة
-    function searchMenu() {
-        let input = document.getElementById("searchInput").value.toUpperCase();
-        let options = document.getElementById("itemSelect").options;
-        for (let i = 0; i < options.length; i++) {
-            let txt = options[i].text;
-            options[i].style.display = txt.toUpperCase().indexOf(input) > -1 ? "" : "none";
-        }
-    }
 </script>
 </body>
 </html>
